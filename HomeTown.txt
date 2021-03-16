@@ -1,0 +1,1164 @@
+# Modules
+import simplegui, time, codeskulptor
+
+# Global Variables
+
+# canvas resolution
+height = 600
+width = 600
+
+# speed
+speedMove = 50
+boardWalk = 80
+cloudMove = 8
+cloudAuto = 0.1
+
+# character default x-positions
+legLdefx = 250
+legRdefx = 250
+armLdefx = 250
+armRdefx = 250
+legWidth = 9
+
+# character default y-positions
+legLdefy = 405
+legRdefy = 405
+armLdefy = 360
+armRdefy = 360
+
+c11 = 100 
+c21 = 600
+
+# house1
+h1w1a = 650
+h1w2b = 1100
+h1ca = 1015
+h1cb = 1070
+h1ra = 615
+h1rb = 875
+h1rc = 1135
+h1da = 750
+h1db = 860
+h1ka = 849
+# target
+trgt1wA = -750
+trgt1wB = -100
+trgt1sA = -434
+trgt1dorA = -550
+trgt1dorB = -320
+trgt1gA = -540
+trgt1gB = -330
+trgt1divA = -435
+trgt1bodhedhatA = -400
+trgt1cntrA = -520
+trgt1cntrB = -334
+trgt1swA = -900
+trgt1swB = 0
+trgt1cntrC = -334
+trgt1cdy1A = -500
+trgt1cdy1B = -470
+trgt1cdy2A = -460
+trgt1cdy2B = -430
+trgt1cdy3A = -420
+trgt1cdy3B = -390
+trgt1cdy4A = -380
+trgt1cdy4B = -350
+trgt1balA = -650
+trgt1balB = -220
+# inside house
+hou1inwalA = 600
+hou1inwalB = 1300
+inh1ra = 560
+inh1rb = 950
+inh1rc = 1340
+inh1nob = 760
+inh1da = 750
+inh1db = 860
+inh1coa = 1000
+inh1cob = 1030
+inh1coc = 1200
+inh1cod = 1170
+inh1L1 = 645
+inh1L2 = 685
+inh1L3 = 665
+inh1L4 = 655
+inh1L5 = 640
+inh1L6 = 690
+inh1L7 = 675
+
+bodyWeight = 12
+moneyCount = 7
+
+# inside target
+intarWa = -700
+intarWb = 200
+intrgt1bodhedhatA = -80
+intrgt1cntrA = -200
+intrgt1cntrB = -14
+intrgt1swA = -580
+intrgt1swB = 320
+intrgt1cntrC = -14
+intrgt1cdy1A = -180
+intrgt1cdy1B = -150
+intrgt1cdy2A = -140
+intrgt1cdy2B = -110
+intrgt1cdy3A = -100
+intrgt1cdy3B = -70
+intrgt1cdy4A = -60
+intrgt1cdy4B = -30
+intrgt1dorA = -550
+intrgt1dorB = -320
+intrgt1gA = -540
+intrgt1gB = -330
+intrgt1divA = -435
+
+step = simplegui.load_sound('https://freesound.org/data/previews/469/469155_9634718-lq.mp3')
+step.set_volume(0.4)
+woodstep = simplegui.load_sound('https://freesound.org/data/previews/434/434757_3346987-lq.mp3')
+woodstep.set_volume(0.2)
+door = simplegui.load_sound('https://freesound.org/data/previews/53/53269_382028-lq.mp3')
+door.set_volume(0.6)
+storedoor = simplegui.load_sound('https://freesound.org/data/previews/399/399092_4284968-lq.mp3')
+storedoor.set_volume(0.2)
+portadoor = simplegui.load_sound('https://freesound.org/data/previews/431/431118_5121236-lq.mp3')
+portadoor.set_volume(0.8)
+storeamb = simplegui.load_sound('https://freesound.org/data/previews/338/338711_6022086-lq.mp3')
+storeamb.set_volume(0.3)
+moneysound = simplegui.load_sound('https://freesound.org/data/previews/140/140382_2289019-lq.mp3')
+moneysound.set_volume(0.4)
+meowsound = simplegui.load_sound('https://freesound.org/data/previews/362/362652_5966858-lq.mp3')
+meowsound.set_volume(0.4)
+lightswitch = simplegui.load_sound('https://freesound.org/data/previews/391/391698_149792-lq.mp3')
+lightswitch.set_volume(0.5)
+couchsound = simplegui.load_sound('https://freesound.org/data/previews/323/323171_5545153-lq.mp3')
+couchsound.set_volume(1)
+cashregister = simplegui.load_sound('https://freesound.org/data/previews/201/201159_3659362-lq.mp3')
+cashregister.set_volume(0.4)
+skate = simplegui.load_sound('https://freesound.org/data/previews/250/250384_4587471-lq.mp3')
+skate.set_volume(1)
+error = simplegui.load_sound('https://freesound.org/data/previews/417/417794_8305364-lq.mp3')
+error.set_volume(0.7)
+concrete = simplegui.load_sound('https://freesound.org/data/previews/475/475854_10132460-lq.mp3')
+concrete.set_volume(0.8)
+outsideamb = simplegui.load_sound('https://freesound.org/data/previews/365/365041_6586255-lq.mp3')  
+button = simplegui.load_sound('https://freesound.org/data/previews/485/485486_10145800-lq.mp3')
+button.set_volume(0.5)
+
+moveAbility = True
+notInBuilding = True
+insideHouse = False
+insideTarget = False
+insidePetco = False
+insidePorta = False
+interactText = False
+buyText = False
+sitting = False
+standing = True
+lampOn = False
+moneyPick1 = False
+moneyPickText1 = False
+showMoney1 = True
+worldLeft = False
+worldRight = False
+catHouse = False
+catStore = True
+petText = False
+insufFundsText = False
+boardOwn = False
+skateboardRide = False
+purchasedText = False
+meowText = False
+onConcrete = False
+startGame = False
+outMap = False
+
+timer_on=False
+held_keys=[]
+
+def draw_handler(canvas):
+    global outMap, height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,lampOn,bodyWeight,moneyCount,insidePorta,moneyPick1,showMoney1, moneyPickText1,startGame
+    global h1w1a,h1w2b,h1ca,h1cb,h1ra,h1rb,h1rc,h1da,h1db,h1ka,insideHouse,hou1inwalA,hou1inwalB,inh1ra,inh1rb,inh1rc,inh1nob,inh1da,inh1db,insideTarget,intrgt1dorA,intrgt1dorB,intrgt1gA,intrgt1gB,intrgt1divA,inh1coa,inh1cob,inh1coc,inh1cod,inh1L1,inh1L2,inh1L3,inh1L4,inh1L5,inh1L6,inh1L7,skateboardRide,buyText
+    global trgt1balA,trgt1balB,trgt1wA,trgt1wB,trgt1sA,trgt1dorA,trgt1dorB,trgt1gA,trgt1gB,trgt1bodhedhatA,trgt1cntrA,trgt1cntrB,trgt1divA,trgt1swA,trgt1swB,trgt1cntrC,trgt1cdy1A,trgt1cdy1B,trgt1cdy2A,trgt1cdy2B,trgt1cdy3A,trgt1cdy3B,trgt1cdy4A,trgt1cdy4B,catHouse,catStore,insufFundsText,boardWalk,meowText
+    global intarWa,intarWb,intrgt1bodhedhatA,intrgt1cntrA,intrgt1cntrA,intrgt1cntrB,intrgt1divA,intrgt1swA,intrgt1swB,intrgt1cntrC,intrgt1cdy1A,intrgt1cdy1B,intrgt1cdy2A,intrgt1cdy2B,intrgt1cdy3A,intrgt1cdy3B,intrgt1cdy4A,intrgt1cdy4B,worldLeft,worldRight,insidePetco,petText,boardOwn,purchasedText,onConcrete
+    if notInBuilding == True:
+        # grass
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "Green", "Green")
+        # dirt
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(128,77,48)", "rgb(128,77,48)")
+        # sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        # cloud 1
+        canvas.draw_circle((c11, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 20, 75), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 15, 120), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 50, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 45, 65), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 80, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 85, 75), 25, 5, "white", "white")
+        # cloud 2
+        canvas.draw_circle((c21, 200), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 10, 205), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 15, 179), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 50, 170), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 45, 220), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 80, 185), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 85, 215), 25, 5, "white", "white")
+        # sign
+        canvas.draw_line((trgt1swB + 393, 350),(trgt1swB + 470, 350), 30, "rgb(110, 66, 19)")
+        canvas.draw_line((trgt1swB + 407, 330),(trgt1swB + 330, 330), 30, "rgb(110, 66, 19)")
+        canvas.draw_line((trgt1swB + 400, 403),(trgt1swB + 400, 305), 15, "rgb(69, 44, 18)")
+        canvas.draw_text("TOWN", (trgt1swB + 419,354), 12, "White")
+        canvas.draw_text("CITY", (trgt1swB + 347,334), 12, "White")
+        # house1
+        canvas.draw_polygon([(h1w1a,402),(h1w1a,150),(h1w2b,150),(h1w2b,402)], 3, "Tan", "Tan") #walls
+        canvas.draw_polygon([(h1ca,150),(h1ca, 50),(h1cb,50),(h1cb,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(h1ra,170),(h1rb,10),(h1rc,170)], 3, "Red", "Red") #roof
+        canvas.draw_polygon([(h1da,402),(h1da, 235),(h1db,235),(h1db,402)],3,"gray","gray") #door
+        canvas.draw_circle((h1ka,330), 3, 5, "Black", "Black") #knob
+        # target
+        canvas.draw_polygon([(trgt1wA,402),(trgt1wA,20),(trgt1wB,20),(trgt1wB,402)], 3, "Tan", "Tan") #walls
+        canvas.draw_circle((trgt1sA,125), 60, 20, "rgb(250, 20, 20)", "tan") #target
+        canvas.draw_circle((trgt1sA,125), 25, 1, "rgb(250, 20, 20)", "rgb(250, 20, 20)") #target
+        canvas.draw_polygon([(trgt1dorA,402),(trgt1dorA, 235),(trgt1dorB,235),(trgt1dorB,402)],3,"gray","gray") #door
+        canvas.draw_polygon([(trgt1gA,402),(trgt1gA, 235),(trgt1gB,235),(trgt1gB,402)],3,"gray","rgb(179,230,245)") #glass
+        canvas.draw_line((trgt1bodhedhatA,365), (trgt1bodhedhatA,310), 12, "rgb(350, 52, 64)") #body
+        canvas.draw_circle((trgt1bodhedhatA,293), 18, 5, "rgb(49, 52, 54)", "rgb(49, 52, 54)") # head
+        canvas.draw_circle((trgt1bodhedhatA,287), 18, 5, "rgb(349, 52, 54)", "rgb(349, 52, 54)") # hat
+        canvas.draw_circle((trgt1bodhedhatA,292), 18, 5, "rgb(161, 10, 37)", "rgb(161, 10, 37)") # hat
+        canvas.draw_circle((trgt1bodhedhatA,295), 17, 5, "rgb(49, 52, 54)", "rgb(49, 52, 54)") # head overlay
+        canvas.draw_polygon([(trgt1cntrA,400),(trgt1cntrA, 325),(trgt1cntrB,325),(trgt1cntrB,400)],6,"rgb(147, 159, 163)","rgb(127, 133, 135)") #counter
+        canvas.draw_polygon([(trgt1cntrA,337),(trgt1cntrA, 325),(trgt1cntrB,325),(trgt1cntrB,337)],6,"rgb(147, 159, 163)","rgb(147, 159, 163)") #counter lip
+        canvas.draw_polygon([(trgt1cntrA,370),(trgt1cntrA, 368),(trgt1cntrC,368),(trgt1cntrC,370)],6,"rgb(147, 159, 163)","rgb(147, 159, 163)") #counter shelf
+        canvas.draw_polygon([(trgt1cdy1A,360),(trgt1cdy1A, 350),(trgt1cdy1B,350),(trgt1cdy1B,360)],2,"rgb(24, 89, 37)","rgb(42, 135, 61)") #candyGreen "rgb(4,71,17)","rgb(0,89,18)"
+        canvas.draw_polygon([(trgt1cdy2A,360),(trgt1cdy2A, 350),(trgt1cdy2B,350),(trgt1cdy2B,360)],2,"rgb(36, 62, 120)","rgb(55, 89, 163)") #candyBlue "rgb(4,34,99)","rgb(9,52,145)"
+        canvas.draw_polygon([(trgt1cdy3A,360),(trgt1cdy3A, 350),(trgt1cdy3B,350),(trgt1cdy3B,360)],2,"rgb(112, 68, 49)","rgb(161, 101, 76)") #candyBrown "rgb(77,41,26)","rgb(122,63,38)"
+        canvas.draw_polygon([(trgt1cdy4A,360),(trgt1cdy4A, 350),(trgt1cdy4B,350),(trgt1cdy4B,360)],2,"rgb(150, 33, 33)","rgb(194, 54, 54)") #candyRed "rgb(135,3,3)","rgb(181,7,7)"
+        canvas.draw_line((trgt1divA,402),(trgt1divA,235), 6, "gray")#door divider
+        canvas.draw_polygon([(trgt1swA + 50,403),(trgt1swA + 50,432),(trgt1swB,432),(trgt1swB,403)], 3, "gray", "gray") #sidewalk
+        canvas.draw_circle((trgt1balA,372), 33, 1, "rgb(189, 13, 13)", "rgb(189, 13, 13)") #target ball left
+        canvas.draw_circle((trgt1balB,372), 33, 1, "rgb(189, 13, 13)", "rgb(189, 13, 13)") #target ball right
+        # petco
+        canvas.draw_polygon([(trgt1wA - 1350,402),(trgt1wA - 1350,20),(trgt1wB - 1250,20),(trgt1wB - 1250,402)], 3, "rgb(255, 181, 79)", "rgb(255, 181, 79)") #walls
+        canvas.draw_circle((trgt1sA - 1300,150), 30, 20, "black", "black") 
+        canvas.draw_circle((trgt1sA  - 1275,165), 30, 1, "black", "black") 
+        canvas.draw_circle((trgt1sA  - 1324,165), 30, 1, "black", "black") 
+        canvas.draw_line((trgt1sA  - 1251, 155),(trgt1sA  - 1270, 131), 10, "black")
+        canvas.draw_line((trgt1sA  - 1347, 155),(trgt1sA  - 1330, 131), 10, "black")
+        canvas.draw_circle((trgt1sA  - 1365, 115), 10, 20, "black", "black") 
+        canvas.draw_circle((trgt1sA  - 1329, 81), 12, 20, "black", "black") 
+        canvas.draw_circle((trgt1sA  - 1278, 81), 12, 20, "black", "black") 
+        canvas.draw_circle((trgt1sA  - 1237, 115), 10, 20, "black", "black")
+        canvas.draw_polygon([(trgt1dorA - 1300,402),(trgt1dorA - 1300, 235),(trgt1dorB - 1300,235),(trgt1dorB - 1300,402)],3,"gray","gray") #door
+        canvas.draw_polygon([(trgt1gA - 1300,402),(trgt1gA - 1300, 235),(trgt1gB - 1300,235),(trgt1gB - 1300,402)],3,"gray","rgb(179,230,245)") #glass
+        canvas.draw_line((trgt1divA - 1300,402),(trgt1divA - 1300,235), 6, "gray")#door divider
+        canvas.draw_polygon([(trgt1swA - 1250,403),(trgt1swA - 1250,432),(trgt1swB - 1100,432),(trgt1swB - 1100,403)], 3, "gray", "gray") #sidewalk
+        # portapotty
+        canvas.draw_circle((trgt1cntrA - 445,267), 60, 2, "rgb(189, 189, 189)", "rgb(242, 242, 242)")
+        canvas.draw_polygon([(trgt1cntrA - 500,402),(trgt1cntrA - 500, 232),(trgt1cntrA - 390,232),(trgt1cntrA - 390,402)],4, "rgb(189, 189, 189)","rgb(24, 111, 173)")
+        canvas.draw_polygon([(trgt1cntrA - 520,400),(trgt1cntrA - 520, 230),(trgt1cntrA - 504,230),(trgt1cntrA - 504,400)],4, "rgb(89, 167, 240)","rgb(89, 167, 240)")
+        canvas.draw_polygon([(trgt1cntrA - 386,400),(trgt1cntrA - 386, 230),(trgt1cntrA - 380,230),(trgt1cntrA - 380,400)],4, "rgb(89, 167, 240)","rgb(89, 167, 240)")
+        canvas.draw_polygon([(trgt1cntrA - 480,402),(trgt1cntrA - 480, 245),(trgt1cntrA - 410,245),(trgt1cntrA - 410,402)],4, "rgb(189, 189, 189)","rgb(24, 111, 173)")
+        canvas.draw_polygon([(trgt1cntrA - 426,340),(trgt1cntrA - 426, 335),(trgt1cntrA - 420,335),(trgt1cntrA - 420,340)],4, "rgb(189, 189, 189)","rgb(189, 189, 189)")
+        if showMoney1 == True:
+            # money1
+            canvas.draw_polygon([(trgt1cntrA - 600,405),(trgt1cntrA - 600, 400),(trgt1cntrA - 620,400),(trgt1cntrA - 620,405)],1, "rgb(0, 15, 4)","rgb(13, 189, 54)")
+        if skateboardRide == True:
+            standing = False
+            speedMove = 100
+            # wheel 1
+            canvas.draw_circle((220, 400), 5, 4, "Black", "Silver")
+            # wheel 2
+            canvas.draw_circle((280, 400), 5, 4, "Black", "Silver")
+            # board
+            canvas.draw_line((205, 392), (295, 392), 8, "rgb(33,33,33)")
+            # board line
+            canvas.draw_line((205, 394), (295, 394), 3, "rgb(245, 245, 245)")
+            # lip left
+            canvas.draw_line((201, 390), (205, 391), 6, "rgb(33,33,33)")
+            canvas.draw_line((200, 392), (206, 393.5), 3, "rgb(245, 245, 245)")
+            # lip right
+            canvas.draw_line((295, 391), (299, 390), 6, "rgb(33,33,33)")
+            canvas.draw_line((293, 393.5), (300, 392), 3, "rgb(245, 245, 245)")
+            # leg left
+            canvas.draw_line((250,345),(legLdefx, legLdefy - 15), legWidth, "Black")   
+            # leg right
+            canvas.draw_line((250,345),(legRdefx, legRdefy - 15), legWidth, "Black")
+            # body
+            canvas.draw_line((250,350), (250,285), bodyWeight, "Black")
+            # head
+            canvas.draw_circle((250,278), 18, 5, "Black", "Black")
+            # arm left
+            canvas.draw_line((250, 285), (armLdefx, armLdefy - 15), 8, "Black")
+            # arm right
+            canvas.draw_line((250, 285), (armRdefx, armRdefy - 15), 8, "Black")
+        if standing == True:
+            speedMove = 50
+            # character model
+            # leg left
+            canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "Black")   
+            # leg right
+            canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "Black")
+            # body
+            canvas.draw_line((250,365), (250,300), bodyWeight, "Black")
+            # head
+            canvas.draw_circle((250,283), 18, 5, "Black", "Black")
+            # arm left
+            canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "Black")
+            # arm right
+            canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "Black")
+        # For Loop // Default Limb Placement
+        for i in range(0,1):
+            time.sleep(0.07)
+            # LIMB RESET
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360 
+
+            # CLOUD AUTO MOVE
+            c11 -= cloudAuto
+            if c11 + 85 <= -100:
+                c11 = 800
+            c21 -= cloudAuto
+            if c21 + 85 <= -100:
+                c21 = 1100
+    if insideHouse == True:
+        #sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        # grass
+        canvas.draw_polygon([(0, height),(0, 403),(width, 403),(width, height)], 3, "Green", "Green")
+        # in house floor
+        canvas.draw_polygon([(hou1inwalA, height),(hou1inwalA, 402),(hou1inwalB, 402),(hou1inwalB, height)], 3, "rgb(38, 22, 7)", "rgb(38, 22, 7)")
+        # dirt
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(128,77,48)", "rgb(128,77,48)")
+        # room walls
+        canvas.draw_polygon([(hou1inwalA, 399),(hou1inwalA, 150),(hou1inwalB, 150),(hou1inwalB, 399)], 3, "rgb(150, 133, 110)", "rgb(150, 133, 110)")
+        #door
+        canvas.draw_polygon([(inh1da,400),(inh1da, 235),(inh1db,235),(inh1db,400)],3,"rgb(74, 72, 70)","rgb(74, 72, 70)") 
+        #knob
+        canvas.draw_circle((inh1nob,330), 3, 5, "Black", "Black") 
+        # roof
+        canvas.draw_polygon([(inh1ra,170),(inh1rb,-50),(inh1rc,170)], 3, "rgb(122, 5, 11)", "rgb(122, 5, 11)") 
+        # couch
+        canvas.draw_polygon([(inh1coa, 350),(inh1coa, 400),(inh1coc, 400),(inh1coc, 350)], 3, "rgb(10, 52, 112)", "rgb(10, 52, 112)")
+        canvas.draw_polygon([(inh1cob, 330),(inh1cob, 375),(inh1cod, 375),(inh1cod, 330)], 4, "rgb(7, 38, 82", "rgb(10, 52, 112)")
+        canvas.draw_polygon([(inh1cob, 330),(inh1cob, 347),(inh1cod, 347),(inh1cod, 330)], 3, "rgb(10, 52, 112)", "rgb(10, 52, 112)")
+        canvas.draw_polygon([(inh1cob, 370),(inh1cob, 375),(inh1cod, 375),(inh1cod, 370)], 3, "rgb(7, 38, 82)", "rgb(7, 38, 82)")
+        # lamp base
+        canvas.draw_line((inh1L1,400), (inh1L2,400), 7, "rgb(23, 23, 23)")
+        # lamp pole
+        canvas.draw_line((inh1L3,280), (inh1L3,402), 6, "rgb(23, 23, 23)")
+        # lamp shade
+        # Off
+        canvas.draw_polygon([(inh1L4, 280),(inh1L5, 250),(inh1L6, 250),(inh1L7, 280)], 3, "gray", "gray")
+        if meowText == True:
+            if insideHouse == True:
+                canvas.draw_text("meow", (intrgt1cntrA + 1153,390), 12, "White")
+        if catHouse == True:
+            canvas.draw_circle((intrgt1cntrA + 1150, 365), 9, 5, "black", "black")
+            canvas.draw_line((intrgt1cntrA + 1150,365),(intrgt1cntrA + 1130,395), 15, "black")
+            canvas.draw_polygon([(intrgt1cntrA + 1150,354),(intrgt1cntrA + 1146,349),(intrgt1cntrA + 1144,355)],3,"black", "black")
+            canvas.draw_polygon([(intrgt1cntrA + 1158,364),(intrgt1cntrA + 1158,349),(intrgt1cntrA + 1151,355)],3,"black", "black")
+            canvas.draw_circle((intrgt1cntrA + 1148, 363), 1, 2, "yellow", "yellow")
+            canvas.draw_circle((intrgt1cntrA + 1157, 363), 1, 2, "yellow", "yellow")
+            canvas.draw_polygon([(intrgt1cntrA + 1154,368),(intrgt1cntrA + 1153,367),(intrgt1cntrA + 1152,366)],3,"pink", "pink")
+            canvas.draw_line((intrgt1cntrA + 1150,368),(intrgt1cntrA + 1140,368),1, "white")
+            canvas.draw_line((intrgt1cntrA + 1165,368),(intrgt1cntrA + 1157,368),1, "white")
+            canvas.draw_polygon([(intrgt1cntrA + 1143,395),(intrgt1cntrA + 1130,395),(intrgt1cntrA + 1125,395)], 13, "black")
+            canvas.draw_line((intrgt1cntrA + 1148,375),(intrgt1cntrA + 1148,401),4,"black")
+            canvas.draw_line((intrgt1cntrA + 1130,392),(intrgt1cntrA + 1100,385),4,"black")
+        if lampOn == True:
+            # in house floor
+            canvas.draw_polygon([(hou1inwalA, height),(hou1inwalA, 402),(hou1inwalB, 402),(hou1inwalB, height)], 3, "rgb(99, 58, 20)", "rgb(99, 58, 20)")
+            # dirt
+            canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(128,77,48)", "rgb(128,77,48)")
+            # room walls
+            canvas.draw_polygon([(hou1inwalA, 399),(hou1inwalA, 150),(hou1inwalB, 150),(hou1inwalB, 399)], 3, "tan", "tan")
+            #door
+            canvas.draw_polygon([(inh1da,400),(inh1da, 235),(inh1db,235),(inh1db,400)],3,"gray","gray") 
+            #knob
+            canvas.draw_circle((inh1nob,330), 3, 5, "Black", "Black") 
+            # roof
+            canvas.draw_polygon([(inh1ra,170),(inh1rb,-50),(inh1rc,170)], 3, "Red", "Red") 
+            # couch
+            canvas.draw_polygon([(inh1coa, 350),(inh1coa, 400),(inh1coc, 400),(inh1coc, 350)], 3, "Blue", "Blue")
+            canvas.draw_polygon([(inh1cob, 330),(inh1cob, 375),(inh1cod, 375),(inh1cod, 330)], 4, "DarkBlue", "Blue")
+            canvas.draw_polygon([(inh1cob, 330),(inh1cob, 347),(inh1cod, 347),(inh1cod, 330)], 3, "Blue", "Blue")
+            canvas.draw_polygon([(inh1cob, 370),(inh1cob, 375),(inh1cod, 375),(inh1cod, 370)], 3, "DarkBlue", "DarkBlue")
+            # lamp base
+            canvas.draw_line((inh1L1,400), (inh1L2,400), 7, "rgb(23, 23, 23)")
+            # lamp pole
+            canvas.draw_line((inh1L3,280), (inh1L3,402), 6, "rgb(23, 23, 23)")
+            # lamp shade On
+            canvas.draw_polygon([(inh1L4, 280),(inh1L5, 250),(inh1L6, 250),(inh1L7, 280)], 3, "rgb(235, 226, 73)", "rgb(235, 226, 73)")
+            if catHouse == True:
+                # cat
+                canvas.draw_circle((intrgt1cntrA + 1150, 365), 9, 5, "black", "black")
+                canvas.draw_line((intrgt1cntrA + 1150,365),(intrgt1cntrA + 1130,395), 15, "black")
+                canvas.draw_polygon([(intrgt1cntrA + 1150,354),(intrgt1cntrA + 1146,349),(intrgt1cntrA + 1144,355)],3,"black", "black")
+                canvas.draw_polygon([(intrgt1cntrA + 1158,364),(intrgt1cntrA + 1158,349),(intrgt1cntrA + 1151,355)],3,"black", "black")
+                canvas.draw_circle((intrgt1cntrA + 1148, 363), 1, 2, "green", "green")
+                canvas.draw_circle((intrgt1cntrA + 1157, 363), 1, 2, "green", "green")
+                canvas.draw_polygon([(intrgt1cntrA + 1154,368),(intrgt1cntrA + 1153,367),(intrgt1cntrA + 1152,366)],3,"pink", "pink")
+                canvas.draw_line((intrgt1cntrA + 1150,368),(intrgt1cntrA + 1140,368),1, "white")
+                canvas.draw_line((intrgt1cntrA + 1165,368),(intrgt1cntrA + 1157,368),1, "white")
+                canvas.draw_polygon([(intrgt1cntrA + 1143,395),(intrgt1cntrA + 1130,395),(intrgt1cntrA + 1125,395)], 13, "black")
+                canvas.draw_line((intrgt1cntrA + 1148,375),(intrgt1cntrA + 1148,401),4,"black")
+                canvas.draw_line((intrgt1cntrA + 1130,392),(intrgt1cntrA + 1100,385),4,"black") 
+            if meowText == True:
+                if insideHouse == True:
+                    canvas.draw_text("meow", (intrgt1cntrA + 1153,390), 12, "White")
+        if standing == True:
+            # leg left
+            canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "Black")   
+            # leg right
+            canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "Black")
+            # body
+            canvas.draw_line((250,365), (250,300), bodyWeight, "Black")
+            # head
+            canvas.draw_circle((250,283), 18, 5, "Black", "Black")
+            # arm left
+            canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "Black")
+            # arm right
+            canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "Black")
+            for i in range(0,1):
+                time.sleep(0.07)
+                speedMove = 50
+                # LIMB RESET
+                legLdefx = 250
+                legLdefy = 405
+                legRdefx = 250
+                legRdefy = 405
+                armLdefx = 250
+                armRdefx = 250
+                armLdefy = 360
+                armRdefy = 360
+    if insideTarget == True or insidePetco == True:
+        storeamb.play()
+    else:
+        storeamb.pause()
+        
+    if notInBuilding == True:
+        outsideamb.play()
+    else:
+        outsideamb.pause()
+    
+    if trgt1cntrA + 380 > 0 and trgt1cntrA < 500 or trgt1dorB - 1990 < 0 and trgt1dorB - 390 > 500:
+        onConcrete = True
+    else:
+        onConcrete = False
+            
+    if insideTarget == True:
+        #grass
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "green", "green")
+        # sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        # inner target walls
+        canvas.draw_polygon([(intarWa - 50,450),(intarWa - 50,0),(intarWb,0),(intarWb,450)], 10, "rgb(153, 153, 153)", "rgb(204,204,204)")
+        # floor
+        canvas.draw_polygon([(intarWa - 50, 450),(intarWa - 50, 402),(intarWb, 402),(intarWb, 450)], 3, "white", "white")
+        # dirt
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(128,77,48)", "rgb(128,77,48)")
+        # cashier
+        canvas.draw_line((intrgt1bodhedhatA,365), (intrgt1bodhedhatA,310), 12, "rgb(186, 0, 33)")
+        canvas.draw_circle((intrgt1bodhedhatA,293), 18, 5, "rgb(15, 15, 15)", "rgb(15, 15, 15)") 
+        canvas.draw_circle((intrgt1bodhedhatA,287), 18, 5, "rgb(242, 12, 14)", "rgb(242, 12, 14)") 
+        canvas.draw_circle((intrgt1bodhedhatA,292), 18, 5, "rgb(105, 6, 6)", "rgb(105, 6, 6)") 
+        canvas.draw_circle((intrgt1bodhedhatA,295), 17, 5, "rgb(15, 15, 15)", "rgb(15, 15, 15)") 
+        canvas.draw_polygon([(intrgt1cntrA,400),(intrgt1cntrA, 325),(intrgt1cntrB,325),(intrgt1cntrB,400)],6,"rgb(114, 126, 130)","rgb(87, 91, 92)") 
+        canvas.draw_polygon([(intrgt1cntrA,337),(intrgt1cntrA, 325),(intrgt1cntrB,325),(intrgt1cntrB,337)],6,"rgb(114, 126, 130)","rgb(114, 126, 130)") 
+        canvas.draw_polygon([(intrgt1cntrA,370),(intrgt1cntrA, 368),(intrgt1cntrC,368),(intrgt1cntrC,370)],6,"rgb(114, 126, 130)","rgb(114, 126, 130)") 
+        canvas.draw_polygon([(intrgt1cdy1A,360),(intrgt1cdy1A, 350),(intrgt1cdy1B,350),(intrgt1cdy1B,360)],2,"rgb(4,71,17)","rgb(0,89,18)") 
+        canvas.draw_polygon([(intrgt1cdy2A,360),(intrgt1cdy2A, 350),(intrgt1cdy2B,350),(intrgt1cdy2B,360)],2,"rgb(4,34,99)","rgb(9,52,145)") 
+        canvas.draw_polygon([(intrgt1cdy3A,360),(intrgt1cdy3A, 350),(intrgt1cdy3B,350),(intrgt1cdy3B,360)],2,"rgb(77,41,26)","rgb(122,63,38)") 
+        canvas.draw_polygon([(intrgt1cdy4A,360),(intrgt1cdy4A, 350),(intrgt1cdy4B,350),(intrgt1cdy4B,360)],2,"rgb(135,3,3)","rgb(181,7,7)") 
+        canvas.draw_polygon([(intrgt1dorA,402),(intrgt1dorA, 235),(intrgt1dorB,235),(intrgt1dorB,402)],3,"gray","gray") 
+        canvas.draw_polygon([(intrgt1gA,402),(intrgt1gA, 235),(intrgt1gB,235),(intrgt1gB,402)],3,"gray","rgb(179,230,245)") 
+        canvas.draw_line((intrgt1divA,402),(intrgt1divA,235), 6, "gray")#door divider
+
+        # rack
+        canvas.draw_line((intarWa + 30,290), (intarWa + 90,290), 8, "White")
+        if boardOwn == False:
+            #skateboard (hanging)
+            canvas.draw_circle((intarWa + 60,300), 14.5, 1, "rgb(18, 18, 18)", "rgb(18, 18, 18)")
+            canvas.draw_circle((intarWa + 60,375), 14.5, 1, "rgb(18, 18, 18)", "rgb(18, 18, 18)")
+            canvas.draw_line((intarWa + 60,300), (intarWa + 60,375), 30, "rgb(33,33,33)")
+        
+        # leg left
+        canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "Black")   
+        # leg right
+        canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "Black")
+        # body
+        canvas.draw_line((250,365), (250,300), bodyWeight, "Black")
+        # head
+        canvas.draw_circle((250,283), 18, 5, "Black", "Black")
+        # arm left
+        canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "Black")
+        # arm right
+        canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "Black")
+        
+        # price board
+        canvas.draw_polygon([(intrgt1cntrA + 30,180),(intrgt1cntrA + 30, 210),(intrgt1cntrA + 155,210),(intrgt1cntrA + 155,180)],3,"gray","gray")
+        # Price
+        canvas.draw_text("$2 for Food", (intrgt1cntrA + 50,200), 18, "Black")
+        
+        # price board skateboard
+        canvas.draw_polygon([(intrgt1cntrA - 515,180),(intrgt1cntrA - 515, 210),(intrgt1cntrA - 370,210),(intrgt1cntrA - 370,180)],3,"gray","gray")
+        canvas.draw_text("$5 for Skateboard", (intrgt1cntrA - 507,200), 18, "Black")
+        
+        for i in range(0,1):
+            time.sleep(0.07)
+            # LIMB RESET
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360
+        
+    if insidePetco == True:
+        #grass
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "green", "green")
+        # sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        # inner target walls
+        canvas.draw_polygon([(intarWa - 1300,450),(intarWa - 1300,0),(intarWb - 1300,0),(intarWb - 1300,450)], 10, "rgb(153, 153, 153)", "rgb(230, 214, 197)")
+        # floor
+        canvas.draw_polygon([(intarWa - 1300, 450),(intarWa - 1300, 402),(intarWb - 1300, 402),(intarWb - 1300, 450)], 3, "white", "white")
+        # dirt
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(128,77,48)", "rgb(128,77,48)")
+        # glass window
+        canvas.draw_polygon([(intrgt1cntrA - 1300,400),(intrgt1cntrA - 1300, 260),(intrgt1cntrA + 185 - 1300,260),(intrgt1cntrA + 185 - 1300,400)],3,"gray","rgb(204, 195, 186")
+        canvas.draw_polygon([(intrgt1cntrA - 1300,400),(intrgt1cntrA - 1300, 328),(intrgt1cntrB - 1300,328),(intrgt1cntrB - 1300,400)],6,"rgb(114, 126, 130)","rgb(87, 91, 92)") #counter
+        canvas.draw_polygon([(intrgt1cntrA - 1300,337),(intrgt1cntrA - 1300, 328),(intrgt1cntrB - 1300,328),(intrgt1cntrB - 1300,337)],6,"rgb(114, 126, 130)","rgb(114, 126, 130)") #counter lip
+        canvas.draw_polygon([(intrgt1cntrA - 1300,370),(intrgt1cntrA - 1300, 368),(intrgt1cntrC - 1300,368),(intrgt1cntrC - 1300,370)],6,"rgb(114, 126, 130)","rgb(114, 126, 130)") #counter shelf
+        
+        canvas.draw_polygon([(intrgt1dorA - 1300,402),(intrgt1dorA - 1300, 235),(intrgt1dorB - 1300,235),(intrgt1dorB - 1300,402)],3,"gray","gray") #door
+        canvas.draw_polygon([(intrgt1gA - 1300,402),(intrgt1gA - 1300, 235),(intrgt1gB - 1300,235),(intrgt1gB - 1300,402)],3,"gray","rgb(179,230,245)") #glass
+        canvas.draw_line((intrgt1divA - 1300,402),(intrgt1divA - 1300,235), 6, "gray")#door divider
+        if catStore == True:
+            canvas.draw_circle((intrgt1cntrA - 1200, 290), 9, 5, "rgb(23, 23, 23)", "rgb(23, 23, 23)")
+            canvas.draw_line((intrgt1cntrA - 1200,290),(intrgt1cntrA - 1180,320), 15, "rgb(23, 23, 23)")
+            canvas.draw_polygon([(intrgt1cntrA - 1200,279),(intrgt1cntrA - 1196,274),(intrgt1cntrA - 1194,280)],3,"rgb(23, 23, 23)", "rgb(23, 23, 23)")
+            canvas.draw_polygon([(intrgt1cntrA - 1208,283),(intrgt1cntrA - 1208,274),(intrgt1cntrA - 1201,280)],3,"rgb(23, 23, 23)", "rgb(23, 23, 23)")
+            canvas.draw_circle((intrgt1cntrA - 1198, 288), 1, 2, "green", "green")
+            canvas.draw_circle((intrgt1cntrA - 1207, 288), 1, 2, "green", "green")
+            canvas.draw_polygon([(intrgt1cntrA - 1204,293),(intrgt1cntrA - 1203,292),(intrgt1cntrA - 1202,291)],3,"pink", "pink")
+            canvas.draw_line((intrgt1cntrA - 1200,293),(intrgt1cntrA - 1190,293),1, "white")
+            canvas.draw_line((intrgt1cntrA - 1215,293),(intrgt1cntrA - 1207,293),1, "white")
+            canvas.draw_polygon([(intrgt1cntrA - 1193,320),(intrgt1cntrA - 1180,320),(intrgt1cntrA - 1175,320)], 13, "rgb(23, 23, 23)")
+            canvas.draw_line((intrgt1cntrA - 1198,300),(intrgt1cntrA - 1198,326),4,"rgb(23, 23, 23)")
+            canvas.draw_line((intrgt1cntrA - 1180,317),(intrgt1cntrA - 1150,310),4,"rgb(23, 23, 23)")
+            
+        # price board
+        canvas.draw_polygon([(intrgt1cntrA - 1300,150),(intrgt1cntrA - 1300, 190),(intrgt1cntrA - 1115,190),(intrgt1cntrA - 1115,150)],3,"gray","gray")
+        # Price
+        canvas.draw_text("$10 for Cat", (intrgt1cntrA - 1280,180), 30, "Black")
+       
+        # leg left
+        canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "Black")   
+        # leg right
+        canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "Black")
+        # body
+        canvas.draw_line((250,365), (250,300), bodyWeight, "Black")
+        # head
+        canvas.draw_circle((250,283), 18, 5, "Black", "Black")
+        # arm left
+        canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "Black")
+        # arm right
+        canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "Black")
+    
+
+        for i in range(0,1):
+            time.sleep(0.07)
+            # LIMB RESET
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360
+
+    if sitting == True:
+        standing = False
+        canvas.draw_line((260,360),(260, 405), legWidth, "Black")   
+        canvas.draw_line((240,360),(240, 405), legWidth, "Black")
+        canvas.draw_line((250,370), (250,330), bodyWeight, "Black")
+        canvas.draw_circle((250,311), 18, 5, "Black", "Black")
+        canvas.draw_line((255, 330), (265, 365), 8, "Black")
+        canvas.draw_line((245, 330), (235, 365), 8, "Black")
+        
+    if insidePorta == True:
+        standing = False
+        if bodyWeight >= 12:
+            bodyWeight = bodyWeight - 2
+    if moneyPickText1 == True:
+         canvas.draw_text("+ $17", (225,240), 18, "Green")
+            
+    if moneyPick1 == True:
+        showMoney1 = False
+        
+    if petText == True:
+        canvas.draw_text("Pet has been delivered to your house.", (135,120), 20, "rgb(214, 109, 28)")
+        
+    if insufFundsText == True:
+        canvas.draw_text("Insufficient Funds", (201,217), 14, "Red")
+        
+    if purchasedText == True:
+        canvas.draw_text("Purchased!", (220,235), 14, "Green")
+        
+    if interactText == True:
+        if sitting == True:
+            canvas.draw_text("INTERACT", (221,283), 12, "Black")
+        elif insidePorta == True:
+            canvas.draw_text("INTERACT", (trgt1cntrA - 475,288), 12, "Black")
+        else:
+            canvas.draw_text("INTERACT", (221,255), 12, "Black")
+            
+    if buyText == True:
+        canvas.draw_text("BUY", (237,255), 12, "Black")
+            
+    if skateboardRide == False:
+        skate.pause()
+    if startGame == True:        
+        # HUD        
+        canvas.draw_text("MONEY: $" + str(moneyCount), (460,25), 20, "Black")
+    
+    if startGame == False:
+        canvas.draw_text("JOURNEYS:", (131,186), 30, "black")
+        canvas.draw_text("JOURNEYS:", (130,185), 30, "white")
+        canvas.draw_text("HOME TOWN", (297,186), 30, "black")
+        canvas.draw_text("HOME TOWN", (296,185), 30, "red")
+        canvas.draw_text("Click Here to PLAY", (230,215), 18, "white")
+        moveAbility = False
+        
+    if outMap == True:
+        canvas.draw_text("TURN AROUND!", (190,186), 30, "black")
+        canvas.draw_text("TURN AROUND!", (189,185), 30, "red")
+
+
+    
+def worldLeft():
+    global legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,sitting,standing
+    global h1w1a,h1w2b,h1ca,h1cb,h1ra,h1rb,h1rc,h1da,h1db,h1ka,hou1inwalA,hou1inwalB,inh1ra,inh1rb,inh1rc,inh1nob,inh1da,inh1db,insideTarget,intrgt1dorA,intrgt1dorB,intrgt1gA,intrgt1gB,intrgt1divA,inh1coa,inh1cob,inh1coc,inh1cod,inh1L1,inh1L2,inh1L3,inh1L4,inh1L5,inh1L6,inh1L7
+    global trgt1balA,trgt1balB,trgt1wA,trgt1wB,trgt1sA,trgt1dorA,trgt1dorB,trgt1gA,trgt1gB,trgt1bodhedhatA,trgt1cntrA,trgt1cntrB,trgt1divA,trgt1swA,trgt1swB,trgt1cntrC,trgt1cdy1A,trgt1cdy1B,trgt1cdy2A,trgt1cdy2B,trgt1cdy3A,trgt1cdy3B,trgt1cdy4A,trgt1cdy4B,buyText
+    global intarWa,intarWb,intrgt1bodhedhatA,intrgt1cntrA,intrgt1cntrA,intrgt1cntrB,intrgt1divA,intrgt1swA,intrgt1swB,intrgt1cntrC,intrgt1cdy1A,intrgt1cdy1B,intrgt1cdy2A,intrgt1cdy2B,intrgt1cdy3A,intrgt1cdy3B,intrgt1cdy4A,intrgt1cdy4B,worldLeft,worldRight,onConcrete
+    
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+        
+    c11 += cloudMove
+    if c11 + 85 >= 800:
+        c11 = -100
+    c21 += cloudMove
+    if c21 + 85 >= 800:
+        c21 = -100
+
+    h1w1a += speedMove
+    h1w2b += speedMove
+    h1ca += speedMove
+    h1cb += speedMove
+    h1ra += speedMove
+    h1rb += speedMove
+    h1rc += speedMove 
+    h1da += speedMove 
+    h1db += speedMove
+    h1ka += speedMove
+    hou1inwalA += speedMove
+    hou1inwalB += speedMove
+    inh1ra += speedMove
+    inh1rb += speedMove
+    inh1rc += speedMove
+    inh1nob += speedMove
+    inh1da += speedMove
+    inh1db += speedMove
+    inh1coa += speedMove
+    inh1cob += speedMove
+    inh1coc += speedMove
+    inh1cod += speedMove
+    inh1L1 += speedMove
+    inh1L2 += speedMove
+    inh1L3 += speedMove
+    inh1L4 += speedMove
+    inh1L5 += speedMove
+    inh1L6 += speedMove
+    inh1L7 += speedMove
+
+    trgt1wA += speedMove
+    trgt1wB += speedMove
+    trgt1sA += speedMove
+    trgt1dorA += speedMove
+    trgt1dorB += speedMove
+    trgt1gA += speedMove
+    trgt1gB += speedMove
+    trgt1bodhedhatA += speedMove
+    trgt1cntrA += speedMove
+    trgt1cntrB += speedMove
+    trgt1divA += speedMove
+    trgt1swA += speedMove
+    trgt1swB += speedMove
+    trgt1cntrC += speedMove
+    trgt1cdy1A += speedMove
+    trgt1cdy1B += speedMove
+    trgt1cdy2A += speedMove
+    trgt1cdy2B += speedMove
+    trgt1cdy3A += speedMove
+    trgt1cdy3B += speedMove
+    trgt1cdy4A += speedMove
+    trgt1cdy4B += speedMove
+    trgt1balA += speedMove
+    trgt1balB += speedMove
+
+    intarWa += speedMove
+    intarWb += speedMove
+    intrgt1bodhedhatA += speedMove
+    intrgt1cntrA += speedMove
+    intrgt1cntrB += speedMove
+    intrgt1swA += speedMove
+    intrgt1swB += speedMove
+    intrgt1cntrC += speedMove
+    intrgt1cdy1A += speedMove
+    intrgt1cdy1B += speedMove
+    intrgt1cdy2A += speedMove
+    intrgt1cdy2B += speedMove
+    intrgt1cdy3A += speedMove
+    intrgt1cdy3B += speedMove
+    intrgt1cdy4A += speedMove
+    intrgt1cdy4B += speedMove
+    intrgt1dorA += speedMove
+    intrgt1dorB += speedMove
+    intrgt1gA += speedMove
+    intrgt1gB += speedMove
+    intrgt1divA += speedMove
+
+
+def worldRight():
+    global legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,sitting,standing
+    global h1w1a,h1w2b,h1ca,h1cb,h1ra,h1rb,h1rc,h1da,h1db,h1ka,hou1inwalA,hou1inwalB,inh1ra,inh1rb,inh1rc,inh1nob,inh1da,inh1db,insideTarget,intrgt1dorA,intrgt1dorB,intrgt1gA,intrgt1gB,intrgt1divA,inh1coa,inh1cob,inh1coc,inh1cod,inh1L1,inh1L2,inh1L3,inh1L4,inh1L5,inh1L6,inh1L7
+    global trgt1balA,trgt1balB,trgt1wA,trgt1wB,trgt1sA,trgt1dorA,trgt1dorB,trgt1gA,trgt1gB,trgt1bodhedhatA,trgt1cntrA,trgt1cntrB,trgt1divA,trgt1swA,trgt1swB,trgt1cntrC,trgt1cdy1A,trgt1cdy1B,trgt1cdy2A,trgt1cdy2B,trgt1cdy3A,trgt1cdy3B,trgt1cdy4A,trgt1cdy4B,buyText,onConcrete
+    global intarWa,intarWb,intrgt1bodhedhatA,intrgt1cntrA,intrgt1cntrA,intrgt1cntrB,intrgt1divA,intrgt1swA,intrgt1swB,intrgt1cntrC,intrgt1cdy1A,intrgt1cdy1B,intrgt1cdy2A,intrgt1cdy2B,intrgt1cdy3A,intrgt1cdy3B,intrgt1cdy4A,intrgt1cdy4B,worldLeft,worldRight
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+
+    c11 -= cloudMove
+    if c11 + 85 <= -100:
+        c11 = 800
+    c21 -= cloudMove
+    if c21 + 85 <= -100:
+        c21 = 1100
+
+    h1w1a -= speedMove
+    h1w2b -= speedMove
+    h1ca -= speedMove
+    h1cb -= speedMove
+    h1ra -= speedMove
+    h1rb -= speedMove
+    h1rc -= speedMove 
+    h1da -= speedMove 
+    h1db -= speedMove
+    h1ka -= speedMove
+    hou1inwalA -= speedMove
+    hou1inwalB -= speedMove
+    inh1ra -= speedMove
+    inh1rb -= speedMove
+    inh1rc -= speedMove
+    inh1nob -= speedMove
+    inh1da -= speedMove
+    inh1db -= speedMove
+    inh1coa -= speedMove
+    inh1cob -= speedMove
+    inh1coc -= speedMove
+    inh1cod -= speedMove
+    inh1L1 -= speedMove
+    inh1L2 -= speedMove
+    inh1L3 -= speedMove
+    inh1L4 -= speedMove
+    inh1L5 -= speedMove
+    inh1L6 -= speedMove
+    inh1L7 -= speedMove
+
+    trgt1wA -= speedMove
+    trgt1wB -= speedMove
+    trgt1sA -= speedMove
+    trgt1dorA -= speedMove
+    trgt1dorB -= speedMove
+    trgt1gA -= speedMove
+    trgt1gB -= speedMove
+    trgt1bodhedhatA -= speedMove
+    trgt1cntrA -= speedMove
+    trgt1cntrB -= speedMove
+    trgt1divA -= speedMove
+    trgt1swA -= speedMove
+    trgt1swB -= speedMove
+    trgt1cntrC -= speedMove
+    trgt1cdy1A -= speedMove
+    trgt1cdy1B -= speedMove
+    trgt1cdy2A -= speedMove
+    trgt1cdy2B -= speedMove
+    trgt1cdy3A -= speedMove
+    trgt1cdy3B -= speedMove
+    trgt1cdy4A -= speedMove
+    trgt1cdy4B -= speedMove
+    trgt1balA -= speedMove
+    trgt1balB -= speedMove
+
+    intarWa -= speedMove
+    intarWb -= speedMove
+    intrgt1bodhedhatA -= speedMove
+    intrgt1cntrA -= speedMove
+    intrgt1cntrB -= speedMove
+    intrgt1swA -= speedMove
+    intrgt1swB -= speedMove
+    intrgt1cntrC -= speedMove
+    intrgt1cdy1A -= speedMove
+    intrgt1cdy1B -= speedMove
+    intrgt1cdy2A -= speedMove
+    intrgt1cdy2B -= speedMove
+    intrgt1cdy3A -= speedMove
+    intrgt1cdy3B -= speedMove
+    intrgt1cdy4A -= speedMove
+    intrgt1cdy4B -= speedMove
+    intrgt1dorA -= speedMove
+    intrgt1dorB -= speedMove
+    intrgt1gA -= speedMove
+    intrgt1gB -= speedMove
+    intrgt1divA -= speedMove
+
+
+
+def walkRight():
+    global outMap, speedMove, cloudMove,interactText,moveAbility,sitting,standing,lampOn,bodyWeight,moneyCount,insidePorta,moneyPick1,showMoney1,moneyPickText1,skateboardRide,h1da,inh1da,trgt1dorB,trgt1dorA,inh1cod,inh1cob,meowText,armLdefx,armLdefy,onConcrete
+    global insideHouse,notInBuilding,insideTarget,insufFundsText,boardWalk,meowTextworldLeft,worldRight,insidePetco,catHouse,catStore,petText,boardOwn,boardOwn,purchasedText,inh1L3,intrgt1cntrA,intrgt1cntrB,trgt1cntrA,trgt1dorB,trgt1dorA,buyText
+
+    
+    if moveAbility == True:
+        worldRight()
+        petText = False
+        moneyPickText1 = False
+        interactText = False 
+        insufFundsText = False
+        purchasedText = False
+        meowText = False
+        buyText = False
+        if h1cb <= -30 or h1cb >= 3770:
+            outMap = True
+        else:
+            outMap = False
+        if insideHouse == True:
+            woodstep.rewind()
+            woodstep.play()
+        elif insideTarget == True or insidePetco == True:
+            concrete.rewind()
+            concrete.play()
+        elif onConcrete == True and skateboardRide == False:
+            concrete.rewind()
+            concrete.play()
+        elif skateboardRide == True:
+            skate.play()
+        else: 
+            step.rewind()
+            step.play()
+            
+
+
+             
+def walkLeft():
+    global outMap, speedMove, cloudMove,interactText,moveAbility,sitting,standing,lampOn,bodyWeight,moneyCount,insidePorta,moneyPick1,showMoney1,moneyPickText1,skateboardRide,h1da,inh1da,trgt1dorB,trgt1dorA,inh1cod,inh1cob,meowText,armLdefx,armLdefy,onConcrete
+    global insideHouse,notInBuilding,insideTarget,insufFundsText,boardWalk,meowTextworldLeft,worldRight,insidePetco,catHouse,catStore,petText,boardOwn,boardOwn,purchasedText,inh1L3,intrgt1cntrA,intrgt1cntrB,trgt1cntrA,trgt1dorB,trgt1dorA,buyText
+    if moveAbility == True:
+        worldLeft()
+        petText = False
+        moneyPickText1 = False
+        interactText = False 
+        insufFundsText = False
+        purchasedText = False
+        meowText = False
+        buyText = False
+        if h1cb <= -30 or h1cb >= 3770:
+            outMap = True
+        else:
+            outMap = False
+            
+        if insideHouse == True:
+            woodstep.rewind()
+            woodstep.play()
+        elif insideTarget == True or insidePetco == True:
+            concrete.rewind()
+            concrete.play()
+        elif onConcrete == True and skateboardRide == False:
+            concrete.rewind()
+            concrete.play()
+        elif skateboardRide == True:
+            skate.play()
+        else: 
+            step.rewind()
+            step.play()  
+
+
+        
+# ride button function
+def ride():
+    global skateboardRide, standing,notInBuilding
+    if notInBuilding == True:
+        if insidePorta == False:
+            if boardOwn == True:
+                skateboardRide = not skateboardRide
+                standing = not standing
+def click(click):
+    global startGame,moveAbility
+    if startGame == False:
+        button.play()
+        startGame = True
+        moveAbility = True
+
+
+def timer_handler():
+    if not timer_on:
+        timer2.start()
+    timer.stop()
+
+def timer2_handler():
+    global timer_on
+    timer_on=True
+    if len(held_keys)==0:
+        timer2.stop()
+        timer_on=False
+    else:
+        for item in held_keys:
+            action(item)
+
+def action(key):
+    global speedMove, cloudMove,interactText,moveAbility,sitting,standing,lampOn,bodyWeight,moneyCount,insidePorta,moneyPick1,showMoney1,moneyPickText1,skateboardRide,h1da,inh1da,trgt1dorB,trgt1dorA,inh1cod,inh1cob,meowText,armLdefx,armLdefy,onConcrete
+    global insideHouse,notInBuilding,insideTarget,insufFundsText,boardWalk,meowTextworldLeft,worldRight,insidePetco,catHouse,catStore,petText,boardOwn,boardOwn,purchasedText,inh1L3,intrgt1cntrA,intrgt1cntrB,trgt1cntrA,trgt1dorB,trgt1dorA,buyText
+
+    if key == leftkey or key == akey:
+        walkLeft()
+    elif key == rightkey or key == dkey:
+        walkRight()
+        
+    if key == simplegui.KEY_MAP["s"] or key == simplegui.KEY_MAP["down"] or key == simplegui.KEY_MAP["S"]: 
+        if notInBuilding == True:
+            if insidePorta == False:
+                if boardOwn == True:
+                    skateboardRide = not skateboardRide
+                    standing = not standing
+    for i in range(0,1):
+        # ENTER HOUSE 1
+        if h1da >= 200 and h1da <= 240 or inh1da >= 200 and inh1da <= 240:
+            if skateboardRide == False:
+                interactText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    insideHouse = not insideHouse
+                    notInBuilding = not notInBuilding   
+                    door.play()
+        elif inh1cod >= 250 and inh1cob <= 250:
+            if notInBuilding == False:
+                interactText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    moveAbility = not moveAbility
+                    sitting = not sitting
+                    standing = not standing
+                    couchsound.rewind()
+                    couchsound.play()
+        elif (trgt1cntrA - 620) >= 50 and (trgt1cntrA - 604) <= 150:
+            if skateboardRide == False:
+                if insidePetco == False:
+                    interactText = True
+                    if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                        moveAbility = not moveAbility
+                        insidePorta = not insidePorta
+                        standing = not standing
+                        portadoor.play()
+        elif inh1L3 >= 200 and inh1L3 <= 250:
+            if notInBuilding == False:
+                interactText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    lampOn = not lampOn
+                    armLdefx = 217
+                    armLdefy = 285
+                    lightswitch.rewind()
+                    lightswitch.play()
+        elif trgt1dorB >= 250 and trgt1dorA <= 200:
+            if skateboardRide == False:
+                interactText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    insideTarget = not insideTarget
+                    notInBuilding = not notInBuilding
+                    storedoor.play()
+        elif (trgt1dorB - 1400) >= 150 and (trgt1dorA - 1400) <= 100:
+            if skateboardRide == False:
+                interactText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    insidePetco = not insidePetco
+                    notInBuilding = not notInBuilding
+                    storedoor.play()
+        elif intrgt1cntrA >= 100 and intrgt1cntrB <= 400:
+            if notInBuilding == False:
+                buyText = True
+                if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                    if moneyCount >= 2:
+                        bodyWeight = bodyWeight + 2
+                        moneyCount = moneyCount - 2
+                        purchasedText = True
+                        cashregister.rewind()
+                        cashregister.play()
+                    elif moneyCount < 2:
+                        insufFundsText = True
+                        error.rewind()
+                        error.play()
+        elif (intrgt1cntrA - 1300) >= 100 and (intrgt1cntrB - 1300) <= 400:
+            if notInBuilding == False:
+                if catStore == True:
+                    buyText = True
+                    if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                        if moneyCount >= 10:
+                            catHouse = True
+                            catStore = False
+                            petText = True
+                            moneyCount = moneyCount - 10
+                            cashregister.rewind()
+                            cashregister.play()
+                            purchasedText = True
+                        elif moneyCount < 10:
+                            insufFundsText = True
+                            error.rewind()
+                            error.play()
+        elif (trgt1cntrA - 600) >= 200 and (trgt1cntrA - 620) <= 300:
+            if skateboardRide == False:
+                if insidePetco == False:
+                    if showMoney1 == True:
+                        interactText = True
+                        if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                            moneyPick1 = True
+                            moneyCount = moneyCount + 17
+                            moneyPickText1 = True
+                            moneysound.play()
+        elif trgt1dorB - 300 >= 250 and trgt1dorA - 150 <= 200:
+            if notInBuilding == False:
+                if boardOwn == False:
+                    buyText = True
+                    if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                        if moneyCount >= 5:
+                            boardOwn = True
+                            moneyCount = moneyCount - 5
+                            purchasedText = True
+                            cashregister.rewind()
+                            cashregister.play()
+                        elif moneyCount < 5:
+                            insufFundsText = True
+                            error.rewind()
+                            error.play()
+                            
+        elif inh1L3 + 300 >= 250 and inh1L3 + 300 <= 350:
+            if notInBuilding == False:
+                if catHouse == True:
+                    interactText = True
+                    if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                        meowText = True
+                        armLdefx = 270
+                        meowsound.play()
+                       
+        
+        # Wall Collide    
+        if notInBuilding == False:
+            if insideHouse == True:
+                if hou1inwalA >= 250:
+                    if key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = True
+
+                elif hou1inwalB <= 250:
+                    if key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = True
+
+            elif insideTarget == True:
+                if intarWb <= 250:
+                    if key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = True
+                    
+                elif intarWa - 50 >= 250:
+                    if key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = True
+                        
+            elif insidePetco == True:
+                if (intarWb - 1300) <= 250:
+                    if key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = True
+                    
+                elif (intarWa - 1300) >= 250:
+                    if key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:
+                        moveAbility = False
+                    elif key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+                        moveAbility = True
+def key_handler(key):
+    global held_keys
+    held_keys.append(key)
+    action(key)
+    if not timer_on:
+        timer.start()
+
+def release_handler(key):
+    global held_keys
+    if key in held_keys:
+        held_keys.remove(key)
+    global timer_on
+    if len(held_keys)==0:
+        timer.stop()
+        timer2.stop()
+        timer_on=False                        
+                        
+                        
+                    
+akey = simplegui.KEY_MAP['a']
+dkey = simplegui.KEY_MAP['d']
+leftkey = simplegui.KEY_MAP['left']
+rightkey = simplegui.KEY_MAP['right']
+
+
+timer = simplegui.create_timer(100, timer_handler)
+timer2 = simplegui.create_timer(200, timer2_handler)                    
+
+# frame
+frame = simplegui.create_frame('Journeys: Home Town', width, height)
+frame.set_canvas_background("White")
+frame.set_draw_handler(draw_handler)
+frame.set_keydown_handler(key_handler)
+frame.set_keyup_handler(release_handler)
+frame.set_mouseclick_handler(click)
+frame.add_label("Controls: ")
+frame.add_label("A / Left Arrow: Move Left")
+frame.add_label("D / Right Arrow: Move Right")
+frame.add_label("W / Up Arrow: Interact")
+frame.add_label("S / Down Arrow: Ride")
+frame.start()
