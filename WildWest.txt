@@ -1,0 +1,1324 @@
+### JOURNEYS WILD WEST
+## BY JOSH COLLINS
+# VERSION 1.12
+ 
+
+# Modules
+import simplegui, time, codeskulptor, random
+
+# canvas resolution
+height = 600
+width = 600
+
+# speed
+speedMove = 50
+boardWalk = 80
+cloudMove = 8
+cloudAuto = 0.1
+tumbleAuto = 15
+banMove = 8
+
+
+# character default x-positions
+legLdefx = 250
+legRdefx = 250
+armLdefx = 250
+armRdefx = 250
+legWidth = 9
+
+playerHP = 100
+
+# character default y-positions
+legLdefy = 405
+legRdefy = 405
+armLdefy = 360
+armRdefy = 360
+
+# background x-positions
+
+# clouds
+c11 = 100 
+c21 = 600
+
+hatx = 233
+cigx = 269
+cig2x = 280
+
+cactusx = 450
+cactusScope = 450
+storeScope = 50
+tumweed1x = 700
+
+store1x = 700
+store2x = 1400
+
+banHP = 100
+banx1 = 990
+banx2 = 989
+banx3 = 940 
+banArm = 0
+banBan = 0
+banFPx1 = 300
+scopeWalk = 0
+
+ban2HP = 100
+ban2x1 = 1490
+ban2x2 = 1489
+ban2x3 = 1440 
+ban2Arm = 0
+ban2Ban = 0
+ban2FPx1 = 300
+scope2Walk = 0
+
+ban3HP = 100   
+ban3x1 = 2590
+ban3x2 = 2589
+ban3x3 = 2540 
+ban3Arm = 0
+ban3Ban = 0
+ban3FPx1 = 300
+scope3Walk = 0
+
+bulletx = 330
+# other
+bodyWeight = 12
+moneyCount = 7
+bullets = 6
+score = 0
+
+# audio
+step = simplegui.load_sound('https://freesound.org/data/previews/469/469155_9634718-lq.mp3')
+step.set_volume(0.4)
+intro = simplegui.load_sound('https://freesound.org/data/previews/440/440784_197130-lq.mp3')
+intro.set_volume(0.05)
+button = simplegui.load_sound('https://freesound.org/data/previews/485/485486_10145800-lq.mp3')
+button.set_volume(0.5)
+griprevolver = simplegui.load_sound('https://freesound.org/data/previews/468/468157_7878399-lq.mp3')
+griprevolver.set_volume(0.9)
+shot = simplegui.load_sound('https://freesound.org/data/previews/58/58904_737031-lq.mp3')
+shot.set_volume(0.6)
+empty = simplegui.load_sound('https://freesound.org/data/previews/154/154934_2575945-lq.mp3')
+empty.set_volume(0.2)
+reload = simplegui.load_sound('https://freesound.org/data/previews/177/177863_1046667-lq.mp3')
+reload.set_volume(0.2)
+death = simplegui.load_sound('https://freesound.org/data/previews/270/270446_5123851-lq.mp3')
+death.set_volume(0.3)
+hurt = simplegui.load_sound('https://freesound.org/data/previews/488/488424_5382295-lq.mp3')
+hurt.set_volume(0.6)
+playerhit = simplegui.load_sound('https://freesound.org/data/previews/416/416839_8247784-lq.mp3')
+playerhit.set_volume(0.4)
+banpain = simplegui.load_sound('https://freesound.org/data/previews/416/416838_8247784-lq.mp3')
+banpain.set_volume(0.8)
+snipershot = simplegui.load_sound('https://freesound.org/data/previews/108/108852_1187658-lq.mp3')
+snipershot.set_volume(1)
+heartbeat = simplegui.load_sound('https://freesound.org/data/previews/29/29715_161750-lq.mp3')
+heartbeat.set_volume(0.5)
+breath = simplegui.load_sound('https://freesound.org/data/previews/316/316949_8335-lq.mp3')
+breath.set_volume(0.4)
+intromusic = simplegui.load_sound('https://freesound.org/data/previews/218/218801_3908940-lq.mp3')
+intromusic.set_volume(0.1)
+
+
+# TRUE FALSE STATEMENTS
+moveAbility = True
+notInBuilding = True
+interactText = False
+buyText = False
+sitting = False
+standing = True
+moneyPick1 = False
+moneyPickText1 = False
+showMoney1 = True
+worldLeft = False
+worldRight = False
+insufFundsText = False
+purchasedText = False
+lookingLeft = False
+lookingRight = True
+hotbarSlot1 = False  
+hotbarSlot2 = False
+hotbarSlot3 = False
+hotbarSlot4 = False
+hotbarSlot5 = False
+hotbarSlot6 = False
+startGame = False
+holster = False
+hipfire = False
+reloadUI = True
+dead = False
+scopeScreen = False
+timer_on=False
+held_keys=[]
+
+
+def draw_handler(canvas):
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,cigx,cig2x,lookingRight,lookingLeft,cactusx,store1x,store2x,tumweed1x,startGame,tumbleAuto,holster,hipfire,bulletx,bullets
+    global hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,reloadUI,banx1,banx2,banx3,banHP,banArm,banMove,playerHP,dead,banBan,ban2x1,ban2x2,ban2x3,ban2HP,ban2Arm,ban2Ban,scopeScreen,scopeWalk,scope2Walk,cactusScope,storeScope,ban3HP,ban3x1,ban3x2,ban3x3,ban3Arm,ban3Ban,ban3FPx1,scope3Walk,score
+    if notInBuilding == True:
+        # sand
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "rgb(199, 160, 54)", "rgb(199, 160, 54)")
+        # dirt 1
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(133, 110, 52)", "rgb(133, 110, 52)")
+        # sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        # cloud 1
+        canvas.draw_circle((c11, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 20, 75), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 15, 120), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 50, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 45, 65), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 80, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 85, 75), 25, 5, "white", "white")
+        # cloud 2
+        canvas.draw_circle((c21, 200), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 10, 205), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 15, 179), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 50, 170), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 45, 220), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 80, 185), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 85, 215), 25, 5, "white", "white") 
+        
+        # cactus
+        canvas.draw_polygon([(cactusx,402),(cactusx,220),(cactusx + 20,220),(cactusx + 20,402)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx + 10,220),10,2,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_polygon([(cactusx,320),(cactusx - 30,274),(cactusx - 15,265),(cactusx + 20,320)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx - 21,272),9.7,2,"rgb(120,156,62)","rgb(120,156,62)")
+        
+        canvas.draw_polygon([(cactusx + 800,402),(cactusx + 800,220),(cactusx + 820,220),(cactusx + 820,402)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx + 810,220),10,2,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_polygon([(cactusx + 800,320),(cactusx + 770,274),(cactusx + 785,265),(cactusx + 820,320)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx + 779,272),9.7,2,"rgb(120,156,62)","rgb(120,156,62)")
+        
+        canvas.draw_polygon([(cactusx + 2000,402),(cactusx + 2000,220),(cactusx + 2020,220),(cactusx + 2020,402)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx + 2010,220),10,2,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_polygon([(cactusx + 2000,320),(cactusx + 1970,274),(cactusx + 1985,265),(cactusx + 2020,320)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusx + 1979,272),9.7,2,"rgb(120,156,62)","rgb(120,156,62)")
+        
+        # store
+        canvas.draw_polygon([(store1x + 50, 20),(store1x + 50, 250),(store1x + 350, 250),(store1x + 350, 20)], 6, "rgb(143, 134, 114)", "rgb(110, 78, 50)")
+        canvas.draw_polygon([(store1x - 50, 400),(store1x - 50, 60),(store1x + 450, 60),(store1x + 450, 400)], 6, "rgb(143, 134, 114)", "rgb(110, 78, 50)")
+        canvas.draw_polygon([(store1x + 56, 40),(store1x + 56, 250),(store1x + 344, 250),(store1x + 344, 40)], 6, "rgb(110, 78, 50)", "rgb(110, 78, 50)")
+        canvas.draw_polygon([(store1x - 50, 400),(store1x - 50, 190),(store1x + 450, 190),(store1x + 450, 400)], 6, "rgb(102, 95, 79)", "rgb(77, 54, 34)")
+        canvas.draw_polygon([(store1x - 80, 200),(store1x - 50, 180),(store1x + 450, 180),(store1x + 480, 200)], 2, "rgb(105, 96, 74)", "rgb(105, 96, 74)") 
+        #supports
+        canvas.draw_polygon([(store1x - 70, 348),(store1x - 70, 202),(store1x - 62, 202),(store1x - 62, 348)], 2, "rgb(133, 121, 93)", "rgb(133, 121, 93)")
+        canvas.draw_polygon([(store1x + 100, 348),(store1x + 100, 202),(store1x + 108, 202),(store1x + 108, 348)], 2, "rgb(133, 121, 93)", "rgb(133, 121, 93)")
+        canvas.draw_polygon([(store1x + 300, 348),(store1x + 300, 202),(store1x + 308, 202),(store1x + 308, 348)], 2, "rgb(133, 121, 93)", "rgb(133, 121, 93)")
+        canvas.draw_polygon([(store1x + 460, 348),(store1x + 460, 202),(store1x + 468, 202),(store1x + 468, 348)], 2, "rgb(133, 121, 93)", "rgb(133, 121, 93)")
+        # door
+        canvas.draw_polygon([(store1x + 160, 230),(store1x + 160, 348),(store1x + 240, 348),(store1x + 240, 230)], 5, "rgb(102, 95, 79)", "rgb(41, 41, 41)")
+        canvas.draw_polygon([(store1x + 165, 270),(store1x + 165, 328),(store1x + 235, 328),(store1x + 235, 270)], 5, "rgb(69, 59, 50)", "rgb(69, 59, 50)")
+        canvas.draw_polygon([(store1x + 199, 268),(store1x + 199, 330),(store1x + 201, 330),(store1x + 201, 268)], 1, "rgb(41, 41, 41)", "rgb(41, 41, 41)")
+        canvas.draw_circle((store1x + 189,265),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 163,269),(store1x + 188,269),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store1x + 211,265),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 210,269),(store1x + 237,269),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store1x + 189,334),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 163,329.5),(store1x + 188,329.5),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store1x + 211,334),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 210,329.5),(store1x + 237,329.5),6,"rgb(41, 41, 41)")
+        #window
+        canvas.draw_polygon([(store1x, 215),(store1x, 300),(store1x + 70, 300),(store1x + 70, 215)], 5, "rgb(122, 114, 95)", "rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 35,215),(store1x + 35,300),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store1x,243),(store1x + 70,243),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store1x,272),(store1x + 70,272),3,"rgb(122, 114, 95)")
+        canvas.draw_polygon([(store1x + 335, 215),(store1x + 335, 300),(store1x + 405, 300),(store1x + 405, 215)], 5, "rgb(122, 114, 95)", "rgb(41, 41, 41)")
+        canvas.draw_line((store1x + 370,215),(store1x + 370,300),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store1x + 335,243),(store1x + 405,243),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store1x + 335,272),(store1x + 405,272),3,"rgb(122, 114, 95)")
+        #porch
+        canvas.draw_polygon([(store1x - 90, 402),(store1x - 90, 350),(store1x + 490, 350),(store1x + 490, 402)], 2, "rgb(128, 98, 70)", "rgb(128, 98, 70)")    
+        canvas.draw_polygon([(store1x - 90, 355),(store1x - 90, 350),(store1x + 490, 350),(store1x + 490, 355)], 2, "rgb(130, 114, 99)", "rgb(130, 114, 99)")  
+        #stairs
+        canvas.draw_polygon([(store1x + 130, 403),(store1x + 130, 360),(store1x + 135, 360),(store1x + 135, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)") 
+        canvas.draw_polygon([(store1x + 200, 403),(store1x + 200, 360),(store1x + 205, 360),(store1x + 205, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)") 
+        canvas.draw_polygon([(store1x + 260, 403),(store1x + 260, 360),(store1x + 265, 360),(store1x + 265, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)")
+        canvas.draw_polygon([(store1x + 129, 362),(store1x + 129, 360),(store1x + 269, 360),(store1x + 269, 362)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")   
+        canvas.draw_polygon([(store1x + 130, 373),(store1x + 130, 371),(store1x + 270, 371),(store1x + 270, 373)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")       
+        canvas.draw_polygon([(store1x + 132, 384),(store1x + 132, 382),(store1x + 272, 382),(store1x + 272, 384)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")   
+        canvas.draw_polygon([(store1x + 128, 395),(store1x + 128, 393),(store1x + 270, 393),(store1x + 270, 395)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)") 
+        #sign
+        canvas.draw_text("SOLEE O'S", (store1x + 10,140), 80, "rgb(128, 98, 71)")
+        canvas.draw_polygon([(store1x + 140, 135),(store1x + 140, 175),(store1x + 260, 175),(store1x + 260, 135)], 3, "rgb(140, 126, 98)", "rgb(87, 75, 51)")
+        canvas.draw_text("STORE", (store1x + 152,165), 30, "rgb(51, 51, 50)")
+
+        
+        # saloon
+        canvas.draw_polygon([(store2x + 50, 20),(store2x + 50, 250),(store2x + 350, 250),(store2x + 350, 20)], 6, "rgb(189, 157, 147)", "rgb(158, 100, 81)")
+        canvas.draw_polygon([(store2x - 50, 400),(store2x - 50, 60),(store2x + 450, 60),(store2x + 450, 400)], 6, "rgb(189, 157, 147)", "rgb(158, 100, 81)")
+        canvas.draw_polygon([(store2x + 56, 40),(store2x + 56, 250),(store2x + 344, 250),(store2x + 344, 40)], 6, "rgb(158, 100, 81)", "rgb(158, 100, 81)")
+        canvas.draw_polygon([(store2x - 50, 400),(store2x - 50, 190),(store2x + 450, 190),(store2x + 450, 400)], 6, "rgb(150, 122, 113)", "rgb(112, 71, 57)")
+        canvas.draw_polygon([(store2x - 80, 200),(store2x - 50, 180),(store2x + 450, 180),(store2x + 480, 200)], 2, "rgb(138, 93, 78)", "rgb(138, 93, 78)") 
+        #supports
+        canvas.draw_polygon([(store2x - 70, 348),(store2x - 70, 202),(store2x - 62, 202),(store2x - 62, 348)], 2, "rgb(153, 132, 119)", "rgb(153, 132, 119)")
+        canvas.draw_polygon([(store2x + 100, 348),(store2x + 100, 202),(store2x + 108, 202),(store2x + 108, 348)], 2, "rgb(153, 132, 119)", "rgb(153, 132, 119)")
+        canvas.draw_polygon([(store2x + 300, 348),(store2x + 300, 202),(store2x + 308, 202),(store2x + 308, 348)], 2, "rgb(153, 132, 119)", "rgb(153, 132, 119)")
+        canvas.draw_polygon([(store2x + 460, 348),(store2x + 460, 202),(store2x + 468, 202),(store2x + 468, 348)], 2, "rgb(153, 132, 119)", "rgb(153, 132, 119)")
+        # door
+        canvas.draw_polygon([(store2x + 160, 230),(store2x + 160, 348),(store2x + 240, 348),(store2x + 240, 230)], 5, "rgb(102, 95, 79)", "rgb(41, 41, 41)")
+        canvas.draw_polygon([(store2x + 165, 270),(store2x + 165, 328),(store2x + 235, 328),(store2x + 235, 270)], 5, "rgb(69, 59, 50)", "rgb(69, 59, 50)")
+        canvas.draw_polygon([(store2x + 199, 268),(store2x + 199, 330),(store2x + 201, 330),(store2x + 201, 268)], 1, "rgb(41, 41, 41)", "rgb(41, 41, 41)")
+        canvas.draw_circle((store2x + 189,265),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 163,269),(store2x + 188,269),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store2x + 211,265),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 210,269),(store2x + 237,269),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store2x + 189,334),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 163,329.5),(store2x + 188,329.5),6,"rgb(41, 41, 41)")
+        canvas.draw_circle((store2x + 211,334),7,1,"rgb(41, 41, 41)","rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 210,329.5),(store2x + 237,329.5),6,"rgb(41, 41, 41)")
+        #window
+        canvas.draw_polygon([(store2x, 215),(store2x, 300),(store2x + 70, 300),(store2x + 70, 215)], 5, "rgb(122, 114, 95)", "rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 35,215),(store2x + 35,300),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store2x,243),(store2x + 70,243),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store2x,272),(store2x + 70,272),3,"rgb(122, 114, 95)")
+        canvas.draw_polygon([(store2x + 335, 215),(store2x + 335, 300),(store2x + 405, 300),(store2x + 405, 215)], 5, "rgb(122, 114, 95)", "rgb(41, 41, 41)")
+        canvas.draw_line((store2x + 370,215),(store2x + 370,300),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store2x + 335,243),(store2x + 405,243),3,"rgb(122, 114, 95)")
+        canvas.draw_line((store2x + 335,272),(store2x + 405,272),3,"rgb(122, 114, 95)")
+        #porch
+        canvas.draw_polygon([(store2x - 90, 402),(store2x - 90, 350),(store2x + 490, 350),(store2x + 490, 402)], 2, "rgb(105, 67, 59)", "rgb(105, 67, 59)")    
+        canvas.draw_polygon([(store2x - 90, 355),(store2x - 90, 350),(store2x + 490, 350),(store2x + 490, 355)], 2, "rgb(130, 114, 99)", "rgb(130, 114, 99)")  
+        #stairs
+        canvas.draw_polygon([(store2x + 130, 403),(store2x + 130, 360),(store2x + 135, 360),(store2x + 135, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)") 
+        canvas.draw_polygon([(store2x + 200, 403),(store2x + 200, 360),(store2x + 205, 360),(store2x + 205, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)") 
+        canvas.draw_polygon([(store2x + 260, 403),(store2x + 260, 360),(store2x + 265, 360),(store2x + 265, 403)], 2, "rgb(94, 89, 83)", "rgb(94, 89, 83)")
+        canvas.draw_polygon([(store2x + 129, 362),(store2x + 129, 360),(store2x + 269, 360),(store2x + 269, 362)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")   
+        canvas.draw_polygon([(store2x + 130, 373),(store2x + 130, 371),(store2x + 270, 371),(store2x + 270, 373)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")       
+        canvas.draw_polygon([(store2x + 132, 384),(store2x + 132, 382),(store2x + 272, 382),(store2x + 272, 384)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)")   
+        canvas.draw_polygon([(store2x + 128, 395),(store2x + 128, 393),(store2x + 270, 393),(store2x + 270, 395)], 2, "rgb(143, 130, 117)", "rgb(143, 130, 117)") 
+        #sign
+        canvas.draw_text("CIANFARANO", (store2x - 28,140), 70, "rgb(168, 122, 106)")
+        canvas.draw_polygon([(store2x + 140, 135),(store2x + 140, 175),(store2x + 260, 175),(store2x + 260, 135)], 3, "rgb(140, 126, 98)", "rgb(87, 75, 51)")
+        canvas.draw_text("SALOON", (store2x + 147,164), 26, "rgb(51, 51, 50)")
+
+        
+        if sitting == True:
+            standing = False
+            # leg left
+            canvas.draw_line((260,360),(260, 405), legWidth, "Black")   
+            # leg right
+            canvas.draw_line((240,360),(240, 405), legWidth, "Black")
+            # body
+            canvas.draw_line((250,370), (250,330), bodyWeight, "Black")
+            # head
+            canvas.draw_circle((250,311), 18, 5, "Black", "Black")
+            # arm left
+            canvas.draw_line((255, 330), (265, 365), 8, "Black")
+            # arm right
+            canvas.draw_line((245, 330), (235, 365), 8, "Black")
+            # cowboy hat
+            canvas.draw_line((hatx,293.3),(hatx + 34,293.3), 20, "rgb(89, 54, 34)")
+            canvas.draw_line((hatx + 12,293.3),(hatx + 22,293.3), 18, "rgb(99, 63, 42)")
+            canvas.draw_line((hatx - 15,301),(hatx + 49,301), 5, "rgb(120, 73, 46)")
+
+            
+        #tumbleweed
+        canvas.draw_circle((tumweed1x, 370), 25, 25, "rgb(153, 140, 92)", "rgb(153, 140, 92)")
+        
+        
+        # Bandit #1 Alive
+        if banHP > 0:
+            canvas.draw_text("Bandit: Nicholas", (banx1 - 45,240), 14, "rgb(150, 240, 41)")
+            canvas.draw_text("HP: " + str(banHP), (banx1 - 22,255), 14, "white")
+            # body
+            canvas.draw_line((banx1,360), (banx1,300), 14, "rgb(168, 135, 86)")
+            # leg left
+            canvas.draw_line((banx1,360),(banx1, 405), 12, "rgb(91, 129, 176)")   
+            # leg right
+            canvas.draw_line((banx1,360),(banx1, 405), 12, "rgb(91, 129, 176)")
+            # head
+            canvas.draw_circle((banx2,283), 18, 5, "rgb(222, 200, 175)", "rgb(222, 200, 175)")
+            # bandana
+            canvas.draw_polygon([(banx1 - 20,285),(banx1 + 18, 285),(banx1 - 15 + banBan,305)],4,"rgb(181, 45, 45)", "rgb(181, 45, 45)")
+            # knife
+            canvas.draw_line(((banx1 - 45) + banArm - 5,318),((banx1 - 45) + banArm - 5,308),6,"rgb(43, 43, 43)")
+            canvas.draw_polygon([((banx1 - 42)+ banArm - 5,320),((banx1 - 46)+ banArm - 5, 320),((banx1 - 46)+ banArm - 5,332)],4,"rgb(161, 159, 159)", "rgb(161, 159, 159)")
+            # arm left
+            canvas.draw_line((banx1, 310), (banx3 + banArm, 310), 9, "rgb(222, 200, 175)")
+        
+        # Bandit #2 Alive
+        if ban2HP > 0:
+            canvas.draw_text("Bandit: Darius", (ban2x1 - 45,235), 14, "rgb(150, 240, 41)")
+            canvas.draw_text("HP: " + str(ban2HP), (ban2x1 - 22,250), 14, "white")
+            # body
+            canvas.draw_line((ban2x1,360), (ban2x1,300), 14, "rgb(74, 63, 49)")
+            # leg left
+            canvas.draw_line((ban2x1,360),(ban2x1, 405), 12, "rgb(91, 129, 176)")   
+            # leg right
+            canvas.draw_line((ban2x1,360),(ban2x1, 405), 12, "rgb(91, 129, 176)")
+            # head
+            canvas.draw_circle((ban2x2,283), 18, 5, "rgb(74, 63, 49)", "rgb(74, 63, 49)")
+            # hair
+            canvas.draw_line((ban2x1,275), (ban2x1,254), 37, "black")
+            # bandana
+            canvas.draw_polygon([(ban2x1 - 20,285),(ban2x1 + 18, 285),(ban2x1 - 15 + ban2Ban,305)],4,"rgb(69, 81, 176)", "rgb(69, 81, 176)")
+            # knife
+            canvas.draw_line(((ban2x1 - 45) + ban2Arm - 5,318),((ban2x1 - 45) + ban2Arm - 5,308),6,"rgb(43, 43, 43)")
+            canvas.draw_polygon([((ban2x1 - 42)+ ban2Arm - 5,320),((ban2x1 - 46)+ ban2Arm - 5, 320),((ban2x1 - 46)+ ban2Arm - 5,332)],4,"rgb(161, 159, 159)", "rgb(161, 159, 159)")
+            # arm left
+            canvas.draw_line((ban2x1, 310), (ban2x3 + ban2Arm, 310), 9, "rgb(74, 63, 49)")
+            
+        # Bandit #3 Alive
+        if ban3HP > 0:
+            canvas.draw_text("Bandit: Olyander", (ban3x1 - 45,235), 14, "rgb(150, 240, 41)")
+            canvas.draw_text("HP: " + str(ban3HP), (ban3x1 - 22,250), 14, "white")
+            # body
+            canvas.draw_line((ban3x1,360), (ban3x1,300), 14, "rgb(168, 103, 120)")
+            # leg left
+            canvas.draw_line((ban3x1,360),(ban3x1, 405), 12, "rgb(145, 124, 67)")   
+            # leg right
+            canvas.draw_line((ban3x1,360),(ban3x1, 405), 12, "rgb(145, 124, 67)")
+            # head
+            canvas.draw_circle((ban3x2,283), 18, 5, "rgb(194, 173, 149)", "rgb(194, 173, 149)")
+            # bandana
+            canvas.draw_polygon([(ban3x1 - 20,285),(ban3x1 + 18, 285),(ban3x1 - 15 + ban3Ban,305)],4,"rgb(127, 72, 168)", "rgb(127, 72, 168)")
+            # knife
+            canvas.draw_line(((ban3x1 - 45) + ban3Arm - 5,318),((ban3x1 - 45) + ban3Arm - 5,308),6,"rgb(43, 43, 43)")
+            canvas.draw_polygon([((ban3x1 - 42)+ ban3Arm - 5,320),((ban3x1 - 46)+ ban3Arm - 5, 320),((ban3x1 - 46)+ ban3Arm - 5,332)],4,"rgb(161, 159, 159)", "rgb(161, 159, 159)")
+            # arm left
+            canvas.draw_line((ban3x1, 310), (ban3x3 + ban3Arm, 310), 9, "rgb(194, 173, 149)")
+            
+            
+        if standing == True:
+            speedMove = 50
+            # character model
+            # leg left
+            canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "Black")   
+            # leg right
+            canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "Black")
+            # look left gun
+            if lookingLeft == True:
+                if hipfire == False:
+                    canvas.draw_line((263,346), (250,352), 6, "rgb(46, 46, 46)")
+                if hipfire == True:
+                    canvas.draw_line((214,330), (184,330), 5, "gray")
+                    canvas.draw_line((204,330), (219,340), 5, "gray")
+                    canvas.draw_line((219,347), (212,330), 6, "rgb(46, 46, 46)")
+                    canvas.draw_circle((bulletx - 150,330),5,3,"rgb(240, 175, 36)","rgb(240, 175, 36)")
+                    canvas.draw_line((bulletx - 173,330),(bulletx - 253,330),2,"white")
+            # body
+            canvas.draw_line((250,365), (250,300), bodyWeight, "Black")
+            # head
+            canvas.draw_circle((250,283), 18, 5, "Black", "Black")
+            # arm left
+            canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "Black")
+            if lookingRight == True:
+                # rifle
+                canvas.draw_line((242,332), (242,306), 4, "rgb(82, 63, 47)")
+                canvas.draw_line((242,332), (242,380), 4, "rgb(79, 78, 77)")
+                canvas.draw_line((242,327), (242,355), 5, "rgb(26, 26, 26)")
+                canvas.draw_line((242,380), (242,382), 4, "rgb(26, 26, 26)")
+                canvas.draw_line((242,355), (242,358), 5, "rgb(15, 15, 15)")
+            if lookingLeft == True:
+                canvas.draw_line((258,342), (258,306), 4, "rgb(82, 63, 47)")
+                canvas.draw_line((258,342), (258,380), 4, "rgb(79, 78, 77)")
+            if holster == False:
+            # arm right
+                canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "Black")
+            # cowboy hat
+            canvas.draw_line((hatx,265.3),(hatx + 34,265.3), 20, "rgb(89, 54, 34)")
+            canvas.draw_line((hatx + 5,258),(hatx + 29,258), 5, "rgb(120, 73, 46)")
+            canvas.draw_line((hatx + 2,258),(hatx + 11,265), 4, "rgb(89, 54, 34)")
+            canvas.draw_line((hatx + 31,258),(hatx + 20,270), 4, "rgb(89, 54, 34)")
+            canvas.draw_line((hatx - 15,273),(hatx + 49,273), 5, "rgb(120, 73, 46)")
+            # cigar
+            canvas.draw_line((cigx,289),(cigx + 11,289), 5, "rgb(59, 38, 26)")
+            canvas.draw_line((cig2x,289),(cig2x + 4,289), 5, "rgb(196, 64, 16)")
+            # gun
+            if lookingRight == True:
+                if hipfire == False:
+                    canvas.draw_line((251,380), (251,348), 5, "gray")
+                    canvas.draw_line((251,360), (247,350), 5, "gray")
+                    canvas.draw_line((251,350), (236,345), 6, "rgb(46, 46, 46)")
+                if hipfire == True:
+                    canvas.draw_line((286,330), (316,330), 5, "gray")
+                    canvas.draw_line((296,330), (281,340), 5, "gray")
+                    canvas.draw_line((281,347), (288,330), 6, "rgb(46, 46, 46)")
+                    canvas.draw_circle((bulletx - 7,330),5,3,"rgb(240, 175, 36)","rgb(240, 175, 36)")
+                    canvas.draw_line((bulletx + 10,330),(bulletx + 90,330),2,"white")
+                    
+            
+        if holster == True:
+            if lookingRight == True:
+                canvas.draw_line((230, 340),(248, 305), 8, "Black")
+                canvas.draw_line((230, 336),(246, 350), 8, "Black")
+            if lookingLeft == True:
+                canvas.draw_line((270, 340),(252, 305), 8, "Black")
+                canvas.draw_line((270, 336),(254, 350), 8, "Black")
+                
+        if hipfire == True:
+            if lookingRight == True:
+                holster = False
+                canvas.draw_line((250, 310),(269, 335), 8, "Black")
+                canvas.draw_line((266, 335),(290, 335), 8, "Black")
+            if lookingLeft == True:
+                holster = False
+                canvas.draw_line((250, 310),(231, 335), 8, "Black")
+                canvas.draw_line((234, 335),(210, 335), 8, "Black")
+            
+            
+       # Bandit #1 Dead   
+        if banHP <= 0:
+            # leg left
+            canvas.draw_line((banx1 - 55,400),(banx1 + 70, 400), 10, "rgb(91, 129, 176)")  
+            # body
+            canvas.draw_line((banx1,400), (banx1 + 70,400), 12, "rgb(168, 135, 86)")
+            # blood
+            canvas.draw_line((banx1 + 13,395), (banx1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            # head
+            canvas.draw_circle((banx1 + 69,398), 18, 5, "rgb(222, 200, 175)", "rgb(222, 200, 175)")
+            # bandana
+            canvas.draw_polygon([(banx1 + 46,387),(banx1 + 65, 379),(banx1 + 65,414)],4,"rgb(181, 45, 45)", "rgb(181, 45, 45)")
+            # arm left
+            canvas.draw_line((banx1 + 5, 405), (banx1 + 45, 403), 9, "rgb(222, 200, 175)")
+            
+        
+        # Bandit #2 Dead   
+        if ban2HP <= 0:
+            # leg left
+            canvas.draw_line((ban2x1 - 55,400),(ban2x1 + 70, 400), 10, "rgb(91, 129, 176)")  
+            # body
+            canvas.draw_line((ban2x1,400), (ban2x1 + 70,400), 12, "rgb(74, 63, 49)")
+            # blood
+            canvas.draw_line((ban2x1 + 13,395), (ban2x1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            # head
+            canvas.draw_circle((ban2x1 + 69,398), 18, 5, "rgb(74, 63, 49)", "rgb(74, 63, 49)")
+            # bandana
+            canvas.draw_polygon([(ban2x1 + 46,387),(ban2x1 + 65, 379),(ban2x1 + 65,414)],4,"rgb(69, 81, 176)", "rgb(69, 81, 176)")
+            # arm left
+            canvas.draw_line((ban2x1 + 5, 405), (ban2x1 + 45, 403), 9, "rgb(74, 63, 49)")
+            # hair
+            canvas.draw_line((ban2x1 + 76,398), (ban2x1 + 99,398), 37, "black")
+            
+        # Bandit #3 Dead   
+        if ban3HP <= 0:
+            # leg left
+            canvas.draw_line((ban3x1 - 55,400),(ban3x1 + 70, 400), 10, "rgb(145, 124, 67)")  
+            # body
+            canvas.draw_line((ban3x1,400), (ban3x1 + 70,400), 12, "rgb(168, 103, 120)")
+            # blood
+            canvas.draw_line((ban3x1 + 13,395), (ban3x1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            # head
+            canvas.draw_circle((ban3x1 + 69,398), 18, 5, "rgb(194, 173, 149)", "rgb(194, 173, 149)")
+            # bandana
+            canvas.draw_polygon([(ban3x1 + 46,387),(ban3x1 + 65, 379),(ban3x1 + 65,414)],4,"rgb(127, 72, 168)", "rgb(127, 72, 168)")
+            # arm left
+            canvas.draw_line((ban3x1 + 5, 405), (ban3x1 + 45, 403), 9, "rgb(194, 173, 149)")
+            
+        # For Loop // Default Limb Placement
+        for i in range(0,1):
+            time.sleep(0.07)
+            
+            # LIMB RESET
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360
+            bulletx = -330
+            
+            if store2x <= -500:
+                store1x += 1900
+                store2x += 1900
+            elif store2x >= 1400:
+                store1x -= 1900
+                store2x -= 1900
+            
+            if lookingRight == True:
+                cactusScope = 450
+                if store1x >= -600:
+                    storeScope = 10
+            if lookingLeft == True:
+                cactusScope = 50
+                if store1x <= 100:
+                    storeScope = 700
+            if lookingRight == True:
+                cigx = 269
+                cig2x = 280
+            elif lookingLeft == True:
+                cigx = 220
+                cig2x = 217   
+            
+                
+            # CLOUD AUTO MOVE
+            c11 -= cloudAuto
+            if c11 + 85 <= -100:
+                c11 = 800
+            c21 -= cloudAuto
+            if c21 + 85 <= -100:
+                c21 = 1100
+                
+            tumweed1x -= tumbleAuto
+            if tumweed1x <= - 2000:
+                tumweed1x = 1100
+            
+            if banHP > 0:
+                if banx1 <= 600:
+                    scopeWalk += 3
+                if banx1 >= 600 or banx1 <= 0:
+                    scopeWalk = 5
+                if banx1 <= 350 and banx1 >= 300:   
+                    banx1 -= banMove - 2.9
+                    banx2 -= banMove - 2.9
+                    banx3 -= banMove - 2.9
+                    banArm = 0
+                    banBan = 0
+                if banx1 >= 280:
+                    banx1 -= banMove
+                    banx2 -= banMove
+                    banx3 -= banMove
+                    banArm = 0
+                    banBan = 0
+                if banx1 <= 220:
+                    banx1 += banMove
+                    banx2 += banMove
+                    banx3 += banMove
+                    banArm = 100
+                    banBan = 29
+            elif banHP <= 0:
+                banHP -= 1
+                
+            if ban2HP > 0:
+                if ban2x1 <= 600:
+                    scope2Walk += 3
+                if ban2x1 >= 600 or ban2x1 <= 0:
+                    scope2Walk = 5
+                if ban2x1 <= 350 and ban2x1 >= 300:   
+                    ban2x1 -= banMove - 2.9
+                    ban2x2 -= banMove - 2.9
+                    ban2x3 -= banMove - 2.9
+                    ban2Arm = 0
+                    ban2Ban = 0
+                if ban2x1 >= 280:
+                    ban2x1 -= banMove
+                    ban2x2 -= banMove
+                    ban2x3 -= banMove
+                    ban2Arm = 0
+                    ban2Ban = 0
+                if ban2x1 <= 220:
+                    ban2x1 += banMove
+                    ban2x2 += banMove
+                    ban2x3 += banMove
+                    ban2Arm = 100
+                    ban2Ban = 29
+            elif ban2HP <= 0:
+                ban2HP -= 1
+            if ban3HP > 0:
+                if ban3x1 <= 600:
+                    scope3Walk += 3
+                if ban3x1 >= 600 or ban3x1 <= 0:
+                    scope3Walk = 5
+                if ban3x1 <= 350 and ban3x1 >= 300:   
+                    ban3x1 -= banMove - 2.9
+                    ban3x2 -= banMove - 2.9
+                    ban3x3 -= banMove - 2.9
+                    ban3Arm = 0
+                    ban3Ban = 0
+                if ban3x1 >= 280:
+                    ban3x1 -= banMove
+                    ban3x2 -= banMove
+                    ban3x3 -= banMove
+                    ban3Arm = 0
+                    ban3Ban = 0
+                if ban3x1 <= 220:
+                    ban3x1 += banMove
+                    ban3x2 += banMove
+                    ban3x3 += banMove
+                    ban3Arm = 100
+                    ban3Ban = 29
+            elif ban3HP <= 0:
+                ban3HP -= 1
+                
+    if banHP > 0:
+        if banx1 <= 290 and banx1 >= 210:
+            playerHP -= 10
+            if playerHP > 0:
+                playerhit.play()
+    elif banHP == -50:
+        banMove += 5
+        banHP = 100
+        x = random.randint(-1000,1000)
+        if x <= 600 and x >= 0:
+            x += 650
+        banx1 += x
+        banx2 += x
+        banx3 += x
+                
+    if ban2HP > 0:
+        if ban2x1 <= 290 and ban2x1 >= 210:
+            playerHP -= 10
+            if playerHP > 0:
+                playerhit.play()
+    elif ban2HP == -50:
+        banMove += 5
+        ban2HP = 100
+        x = random.randint(-1000,1000)
+        if x <= 600 and x >= 0:
+            x += 650
+        ban2x1 += x
+        ban2x2 += x
+        ban2x3 += x
+    if ban3HP > 0:
+        if ban3x1 <= 290 and ban3x1 >= 210:
+            playerHP -= 10
+            if playerHP > 0:
+                playerhit.play()
+    elif ban3HP == -50:
+        banMove += 5
+        ban3HP = 100
+        x = random.randint(-1000,1000)
+        if x <= 600 and x >= 0:
+            x += 650
+        ban3x1 += x
+        ban3x2 += x
+        ban3x3 += x
+                
+    if moneyPick1 == True:
+        showMoney1 = False
+        
+    if insufFundsText == True:
+        canvas.draw_text("Insufficient Funds", (101,217), 14, "Red")
+        
+    if purchasedText == True:
+        canvas.draw_text("Purchased!", (120,235), 14, "Green")
+        
+    if interactText == True:
+        if sitting == True:
+            canvas.draw_text("INTERACT", (220,275), 12, "white")
+        else:
+            canvas.draw_text("INTERACT", (220,245), 12, "white")
+            
+    if buyText == True:
+        canvas.draw_text("BUY", (137,255), 12, "Black")
+    
+    if startGame == True:
+        # UI        
+        #canvas.draw_text("MONEY: $" + str(moneyCount), (460,25), 20, "Black")
+
+        canvas.draw_text("HP: " + str(playerHP), (520,585), 20, "white")
+        if hotbarSlot1 == True:
+            canvas.draw_text("AMMO: " + str(bullets) + "/6", (485,540), 20, "White")
+        canvas.draw_text("Score: " + str(score), (510,563), 20, "white")
+
+
+        if reloadUI == True:
+            if hotbarSlot1 == True:
+                if bullets <= 0:
+                    canvas.draw_text("RELOAD (R)", (219.5,240.5), 12, "black")
+                    canvas.draw_text("RELOAD (R)", (219,240), 12, "red")
+                
+   
+    
+    if startGame == True:
+        # inventory
+        # Back drop
+        canvas.draw_polygon([(150,535),(150,585),(450,585),(450,535)], 2, "Gray", "Gray")
+
+        # revolver in slot
+        canvas.draw_line((160,558), (192,546), 5, "rgb(87, 85, 84)")
+        canvas.draw_line((163,564), (174,555), 5, "rgb(87, 85, 84)")
+        canvas.draw_line((164,555), (160,575), 6, "rgb(99, 72, 42)")
+        # scoped rifle
+        canvas.draw_line((223,559),(202,574),5.6,"rgb(82, 63, 47)")
+        canvas.draw_line((215,565),(204,577),7,"rgb(82, 63, 47)")
+        canvas.draw_line((220,562),(250,542),5,"rgb(79, 78, 77)")
+        canvas.draw_line((215,558.8),(236,545),5,"rgb(26, 26, 26)")
+
+        # Outline
+        canvas.draw_polygon([(150,585),(150,535),(450,535),(450,586)], 3, "white")
+        # Mid Vertical
+        canvas.draw_line((200, 534), (200, 586), 3, "white")
+        canvas.draw_line((250, 534), (250, 586), 3, "white")
+        canvas.draw_line((300, 534), (300, 586), 3, "white")
+        canvas.draw_line((350, 534), (350, 586), 3, "white")
+        canvas.draw_line((400, 534), (400, 586), 3, "white")
+        # Numbers
+        canvas.draw_text("1", (188,580), 15, "white")
+        canvas.draw_text("2", (238,580), 15, "white")
+        canvas.draw_text("3", (288,580), 15, "white")
+        canvas.draw_text("4", (338,580), 15, "white")
+        canvas.draw_text("5", (388,580), 15, "white")
+        canvas.draw_text("Q", (437,580), 13, "white")
+
+        if hotbarSlot1 == True:
+            canvas.draw_polygon([(150,585),(150,535),(200,535),(200,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot2 == True:
+            canvas.draw_polygon([(250,585),(250,535),(200,535),(200,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot3 == True:
+            canvas.draw_polygon([(250,585),(250,535),(300,535),(300,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot4 == True:
+            canvas.draw_polygon([(350,585),(350,535),(300,535),(300,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot5 == True:
+            canvas.draw_polygon([(350,585),(350,535),(400,535),(400,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot6 == True:
+            canvas.draw_polygon([(450,585),(450,535),(400,535),(400,585)],3,"rgb(125, 240, 17)")
+
+    
+    if startGame == False:
+        canvas.draw_text("JOURNEYS:", (131,186), 30, "black")
+        canvas.draw_text("JOURNEYS:", (130,185), 30, "white")
+        canvas.draw_text("WILD WEST", (297,186), 30, "black")
+        canvas.draw_text("WILD WEST", (296,185), 30, "rgb(240, 174, 22)")
+        canvas.draw_text("Click Here to PLAY", (230,215), 18, "white")
+        tumbleAuto = 0
+        moveAbility = False
+        banMove = 0
+        intromusic.play()
+    elif startGame == True:
+        tumbleAuto = 15
+        banMove = 8
+        intromusic.pause()
+        
+    if playerHP <= 0:
+        dead = True   
+
+    
+    if scopeScreen == True:
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "rgb(199, 160, 54)", "rgb(199, 160, 54)")
+        canvas.draw_polygon([(cactusScope,402),(cactusScope,220),(cactusScope + 20,220),(cactusScope + 20,402)],3,"rgb(120,156,62)","rgb(120,156,62)")
+        canvas.draw_circle((cactusScope + 10,220),10,2,"rgb(120,156,62)","rgb(120,156,62)")
+        
+        canvas.draw_polygon([(storeScope - 200, 80),(storeScope - 200, 410),(storeScope + 100, 410),(storeScope + 100, 80)], 3, "rgb(143, 134, 114)", "rgb(110, 78, 50)")
+        
+        if banx1 <= 600:
+            if banx1 <= 600 and banx1 >= 250 and lookingRight == True or banx1 >= 0 and banx1 <= 250 and lookingLeft == True:
+                if banHP > 0:
+                    # leg left
+                    canvas.draw_line((banFPx1,360),(banFPx1, 405 + (scopeWalk*3)), 28 + (scopeWalk*1.5), "rgb(91, 129, 176)")   
+                    # body
+                    canvas.draw_line((banFPx1,360 + (scopeWalk*2)), (banFPx1,300 - (scopeWalk*2)), 30 + (scopeWalk*1.5), "rgb(168, 135, 86)")
+                    # head
+                    canvas.draw_circle((banFPx1,283 - (scopeWalk*1.5)), 18 + scopeWalk, 5+(scopeWalk*0.5), "rgb(222, 200, 175)", "rgb(222, 200, 175)")
+                    # bandana
+                    canvas.draw_polygon([(banFPx1- 18-(scopeWalk/3), 285-(scopeWalk/2)), (banFPx1+18+(scopeWalk/3), 285-(scopeWalk/2)), (banFPx1,312+(scopeWalk/20))], 4+(scopeWalk*1), "rgb(181, 45, 45)", "rgb(181, 45, 45)")
+        if ban2x1 <= 600:
+            if ban2x1 <= 600 and ban2x1 >= 250 and lookingRight == True or ban2x1 >= 0 and ban2x1 <= 250 and lookingLeft == True:
+                if ban2HP > 0:
+                    # leg left
+                    canvas.draw_line((ban2FPx1,360),(ban2FPx1, 405 + (scope2Walk*3)), 28 + (scope2Walk*1.5), "rgb(91, 129, 176)")   
+                    # body
+                    canvas.draw_line((ban2FPx1,360 + (scope2Walk*2)), (ban2FPx1,300 - (scope2Walk*2)), 30 + (scope2Walk*1.5), "rgb(74, 63, 49)")
+                    # head
+                    canvas.draw_circle((ban2FPx1,283 - (scope2Walk*1.5)), 18 + scope2Walk, 5+(scope2Walk*0.5), "rgb(74, 63, 49)", "rgb(74, 63, 49)")
+                    # hair
+                    canvas.draw_line((ban2FPx1,280 - (scope2Walk*2.6)), (ban2FPx1,262 - (scope2Walk*4)), 44 + (scope2Walk*1.5), "black")
+                    # bandana
+                    canvas.draw_polygon([(ban2FPx1- 18-(scope2Walk/3), 285-(scope2Walk/2)), (ban2FPx1+18+(scope2Walk/3), 285-(scope2Walk/2)), (ban2FPx1,312+(scope2Walk/20))], 4+(scope2Walk*1), "rgb(69, 81, 176)", "rgb(69, 81, 176)")       
+        if ban3x1 <= 600:
+            if ban3x1 <= 600 and ban3x1 >= 250 and lookingRight == True or ban3x1 >= 0 and ban3x1 <= 250 and lookingLeft == True:
+                if ban3HP > 0:
+                    # leg left
+                    canvas.draw_line((ban3FPx1,360),(ban3FPx1, 405 + (scope3Walk*3)), 28 + (scope3Walk*1.5), "rgb(145, 124, 67)")   
+                    # body
+                    canvas.draw_line((ban3FPx1,360 + (scope3Walk*2)), (ban3FPx1,300 - (scope3Walk*2)), 30 + (scope3Walk*1.5), "rgb(168, 103, 120)")
+                    # head
+                    canvas.draw_circle((ban3FPx1,283 - (scope3Walk*1.5)), 18 + scope3Walk, 5+(scope3Walk*0.5), "rgb(194, 173, 149)", "rgb(194, 173, 149)")
+                    # bandana
+                    canvas.draw_polygon([(ban3FPx1- 18-(scope3Walk/3), 285-(scope3Walk/2)), (ban3FPx1+18+(scope3Walk/3), 285-(scope3Walk/2)), (ban3FPx1,312+(scope3Walk/20))], 4+(scope3Walk*1), "rgb(127, 72, 168)", "rgb(127, 72, 168)")          
+        
+        canvas.draw_circle((300,560),75,10,"rgb(46, 46, 46)","rgb(13, 13, 13)")        
+        canvas.draw_circle((300,300),300,80,"black")
+        canvas.draw_circle((300,300),340,30,"gray")
+        canvas.draw_line((300,600),(300,315),10,"black")
+        canvas.draw_line((20,300),(270,300),10,"black")
+        canvas.draw_line((330,300),(580,300),10,"black")
+    else:
+        breath.pause()
+        heartbeat.pause()
+        
+    if dead == True:
+        canvas.draw_polygon([(0, 600),(0, 0),(width, 0),(width, 600)], 3, "black", "black")
+        canvas.draw_text("YOU ARE DEAD", (172,315), 35, "red")
+        canvas.draw_text("Press Reset to Try Again", (238,333), 14, "white")
+        canvas.draw_text("Score: " + str(score), (270,400), 20, "White")
+        moveAbility = False
+        hurt.pause()
+        death.play()
+        if playerHP < -55:
+            death.pause()
+        
+    
+def worldLeft():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,cactusx,store1x,store2x,tumweed1x,startGame,holster,hipfire,banx1,banx2,banx3,banHP,banArm,ban2x1,ban2x2,ban2x3,ban2HP,ban3HP,ban3x1,ban3x2,ban3x3,ban3Arm,ban3Ban,ban3FPx1,scope3Walk
+    
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+    c11 += cloudMove
+    if c11 + 85 >= 800:
+        c11 = -100
+    c21 += cloudMove
+    if c21 + 85 >= 800:
+        c21 = -100
+        
+    cactusx += speedMove
+    store1x += speedMove
+    store2x += speedMove
+    tumweed1x += speedMove
+    banx1 += speedMove 
+    banx2 += speedMove
+    banx3 += speedMove
+    ban2x1 += speedMove 
+    ban2x2 += speedMove
+    ban2x3 += speedMove
+    ban3x1 += speedMove 
+    ban3x2 += speedMove
+    ban3x3 += speedMove
+def worldRight():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,cactusx,store1x,store2x,tumweed1x,startGame,holster,hipfire,banx1,banx2,banx3,banHP,banArm,ban2x1,ban2x2,ban2x3,ban2HP,ban3HP,ban3x1,ban3x2,ban3x3,ban3Arm,ban3Ban,ban3FPx1,scope3Walk
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+
+    c11 -= cloudMove
+    if c11 + 85 <= -100:
+        c11 = 800
+    c21 -= cloudMove
+    if c21 + 85 <= -100:
+        c21 = 1100
+        
+    cactusx -= speedMove
+    store1x -= speedMove
+    store2x -= speedMove
+    tumweed1x -= speedMove
+    banx1 -= speedMove 
+    banx2 -= speedMove
+    banx3 -= speedMove
+    ban2x1 -= speedMove 
+    ban2x2 -= speedMove
+    ban2x3 -= speedMove
+    ban3x1 -= speedMove 
+    ban3x2 -= speedMove
+    ban3x3 -= speedMove
+
+
+def walkRight():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,lookingRight,lookingLeft,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,startGame,holster,hipfire,bulletx,bullets,reloadUI,scopeScreen,banHP,ban2HP,ban3HP
+
+    if moveAbility == True:
+        if hotbarSlot2 == False:
+            worldRight()
+            moneyPickText1 = False
+            interactText = False 
+            insufFundsText = False
+            purchasedText = False
+            lookingRight = True
+            lookingLeft = False
+            if hotbarSlot1 == True:
+                holster = True
+            hipfire = False
+            step.rewind()
+            step.play()
+        
+
+        
+    if store1x <= 100 and store1x >= 0 or store2x <= 100 and store2x >= 0:    
+        if holster == False and hipfire == False and scopeScreen == False:
+            interactText = True
+
+
+def walkLeft():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,lookingRight,lookingLeft,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,startGame,holster,hipfire,bulletx,bullets,reloadUI,scopeScreen,banHP,ban2HP,ban3HP
+
+    if moveAbility == True:
+        if hotbarSlot2 == False:
+            worldLeft()
+            moneyPickText1 = False
+            interactText = False 
+            insufFundsText = False
+            purchasedText = False
+            lookingRight = False
+            lookingLeft = True
+            if hotbarSlot1 == True:
+                holster = True
+            hipfire = False
+            step.rewind()
+            step.play()
+        
+    if store1x <= 100 and store1x >= 0 or store2x <= 100 and store2x >= 0:    
+        if holster == False and hipfire == False and scopeScreen == False:
+            interactText = True
+                
+
+# interact function for button    
+def interact():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,lookingRight,lookingLeft,startGame
+    
+    if store1x <= 100 and store1x >= 0 or store2x <= 100 and store2x >= 0:
+        if holster == False and hipfire == False and scopeScreen == False:
+            sitting = not sitting
+            standing = not standing
+            moveAbility = not moveAbility
+def fire():
+    global score, moneyCount,hpPotionCount,shopUI,startGame,potionEquip,moveAbility,playerMana,swordEquip,blazeOwn,hotbarSlot2,hotbarSlot6,dead,holster,hipfire,bulletx,hotbarSlot1,lookingLeft,lookingRight,bullets,reloadUI,interactText,banHP,ban2x1,ban2x2,ban2x3,ban2HP,scopeScreen,ban3HP,ban3x1,ban3x2,ban3x3,ban3Arm,ban3Ban,ban3FPx1,scope3Walk
+    # Revolver
+    if hotbarSlot1 == True:
+        hipfire = True
+        interactText = False
+        if bullets > 0:
+            if lookingRight == True:
+                bulletx = 330
+            if lookingLeft == True:
+                bulletx = 330
+            shot.rewind()
+            shot.play()
+            bullets -= 1
+        elif bullets == 0:
+            empty.rewind()
+            empty.play()
+            reloadUI == True
+            
+        if bullets > 0:      
+            if lookingRight:
+                if banx1 <= 600 and banx1 >= 250:
+                    if banHP > -10:
+                        banHP -= 20
+                        if banHP == 0:
+                            banpain.play()
+                            score += 1
+            if lookingLeft:
+                if banx1 >= 0 and banx1 <= 250:
+                    if banHP > -10:
+                        banHP -= 20
+                        if banHP == 0:
+                            banpain.play()
+                            score += 1
+
+            if lookingRight:
+                if ban2x1 <= 600 and ban2x1 >= 250:
+                    if ban2HP > -10:
+                        ban2HP -= 20
+                        if ban2HP == 0:
+                            banpain.play()
+                            score += 1
+            if lookingLeft:
+                if ban2x1 >= 0 and ban2x1 <= 250:
+                    if ban2HP > -10:
+                        ban2HP -= 20
+                        if ban2HP == 0:
+                            banpain.play()
+                            score += 1
+
+            if lookingRight:
+                if ban3x1 <= 600 and ban3x1 >= 250:
+                    if ban3HP > -10:
+                        ban3HP -= 20
+                        if ban3HP == 0:
+                            banpain.play()
+                            score += 1
+            if lookingLeft:
+                if ban3x1 >= 0 and ban3x1 <= 250:
+                    if ban3HP > -10:
+                        ban3HP -= 20
+                        if ban3HP == 0:
+                            banpain.play()
+                            score += 1
+    # Sniper Rifle                        
+    if hotbarSlot2 == True:    
+        interactText = False
+        snipershot.rewind()
+        snipershot.play()
+        scopeScreen = False
+        hotbarSlot2 = False
+        if lookingRight:
+            if banx1 <= 600 and banx1 >= 250:
+                if banHP > -10:
+                    banHP -= 100
+                    if banHP == 0:
+                        banpain.play()
+                        score += 1
+        if lookingLeft:
+            if banx1 >= 0 and banx1 <= 250:
+                if banHP > -10:
+                    banHP -= 100
+                    if banHP == 0:
+                        banpain.play()
+                        score += 1
+
+        if lookingRight:
+            if ban2x1 <= 600 and ban2x1 >= 250:
+                if ban2HP > -10:
+                    ban2HP -= 100
+                    if ban2HP == 0:
+                        banpain.play()
+                        score += 1
+        if lookingLeft:
+            if ban2x1 >= 0 and ban2x1 <= 250:
+                if ban2HP > -10:
+                    ban2HP -= 100
+                    if ban2HP == 0:
+                        banpain.play()
+                        score += 1
+        if lookingRight:
+            if ban3x1 <= 600 and ban3x1 >= 250:
+                if ban3HP > -10:
+                    ban3HP -= 100
+                    if ban3HP == 0:
+                        banpain.play()
+                        score += 1
+        if lookingLeft:
+            if ban3x1 >= 0 and ban3x1 <= 250:
+                if ban3HP > -10:
+                    ban3HP -= 100
+                    if ban3HP == 0:
+                        banpain.play()
+                        score += 1
+
+def slot1():
+    global hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,holster,interactText,hipfire,scopeScreen
+    if moveAbility == True and scopeScreen == False:
+        hotbarSlot1 = not hotbarSlot1
+        hotbarSlot2 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        holster = not holster
+        griprevolver.rewind()
+        griprevolver.play()
+        interactText = False
+        if hotbarSlot1 == False:
+            holster = False
+            hipfire = False
+            
+def slot2():
+    global hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,holster,interactText,hipfire,scopeScreen
+    if moveAbility == True:
+        hotbarSlot2 = not hotbarSlot2
+        hotbarSlot1 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        potionEquip = False
+        holster = False
+        hipfire = False
+        interactText = False
+        scopeScreen = not scopeScreen
+        if scopeScreen == True:
+            breath.rewind()
+            breath.play()
+            heartbeat.rewind()
+            heartbeat.play()
+                    
+def reloadFunction():
+    global hotbarSlot1,bullets,holster,hipfire,reloadUI
+    if hotbarSlot1 == True:
+        if bullets < 6:
+            bullets = 6
+            reload.play()
+            holster = True
+            hipfire = False
+            reloadUI = False  
+        
+def click(click):
+    global moneyCount,hpPotionCount,shopUI,startGame,potionEquip,moveAbility,playerMana,swordEquip,blazeOwn,hotbarSlot2,hotbarSlot6,dead,holster,hipfire,bulletx,hotbarSlot1,lookingLeft,lookingRight,bullets,scopeScreen
+    if startGame == False:
+        button.play()
+        intro.play()
+        startGame = True
+        moveAbility = True
+    if startGame == True:
+        if hotbarSlot1 == True:
+            fire()
+        if hotbarSlot2 == True:
+            fire()
+
+
+def timer_handler():
+    if not timer_on:
+        timer2.start()
+    timer.stop()
+
+def timer2_handler():
+    global timer_on
+    timer_on=True
+    if len(held_keys)==0:
+        timer2.stop()
+        timer_on=False
+    else:
+        for item in held_keys:
+            action(item)
+
+def action(key):
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,lookingRight,lookingLeft,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,startGame,holster,hipfire,bulletx,bullets,reloadUI,scopeScreen,banHP,ban2HP,ban3HP
+
+    if key == leftkey or key == akey:
+        walkLeft()
+    elif key == rightkey or key == dkey:
+        walkRight()
+        
+    if key == simplegui.KEY_MAP["r"]:
+        if hotbarSlot1 == True:
+            if bullets < 6:
+                bullets = 6
+                reload.play()
+                holster = True
+                hipfire = False
+                reloadUI = False     
+                
+    if key == simplegui.KEY_MAP["b"]:
+        if banHP <= 0:
+            banHP = 100
+        if ban2HP <= 0:
+            ban2HP = 100
+        if ban3HP <= 0:
+            ban3HP = 100
+        
+                
+                
+    if key == simplegui.KEY_MAP["space"]:
+        if hotbarSlot1 == True:
+            if moveAbility == True:
+                fire()
+                if bullets <= 0:
+                    reloadUI = True
+        if hotbarSlot2 == True:
+            fire()
+        
+            
+    if key == simplegui.KEY_MAP["1"] and moveAbility == True and scopeScreen == False:
+        hotbarSlot1 = not hotbarSlot1
+        hotbarSlot2 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        holster = not holster
+        griprevolver.rewind()
+        griprevolver.play()
+        interactText = False
+        if hotbarSlot1 == False:
+            holster = False
+            hipfire = False
+            
+    if key == simplegui.KEY_MAP["2"]:
+        hotbarSlot2 = not hotbarSlot2
+        hotbarSlot1 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        potionEquip = False
+        holster = False
+        hipfire = False
+        interactText = False
+        scopeScreen = not scopeScreen
+        if scopeScreen == True:
+            breath.rewind()
+            breath.play()
+            heartbeat.rewind()
+            heartbeat.play()
+        
+            
+    if key == simplegui.KEY_MAP["3"] and moveAbility == True and scopeScreen == False:
+        hotbarSlot3 = not hotbarSlot3
+        hotbarSlot1 = False
+        hotbarSlot2 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        holster = False
+    
+    if key == simplegui.KEY_MAP["4"] and moveAbility == True and scopeScreen == False:
+        hotbarSlot4 = not hotbarSlot4
+        hotbarSlot1 = False
+        hotbarSlot2 = False
+        hotbarSlot3 = False
+        hotbarSlot5 = False
+        hotbarSlot6 = False
+        holster = False
+            
+    if key == simplegui.KEY_MAP["5"] and moveAbility == True and scopeScreen == False:
+        hotbarSlot5 = not hotbarSlot5
+        hotbarSlot1 = False
+        hotbarSlot2 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot6 = False
+        holster = False
+            
+    if key == simplegui.KEY_MAP["q"] and moveAbility == True and scopeScreen == False:
+        hotbarSlot6 = not hotbarSlot6
+        hotbarSlot1 = False
+        hotbarSlot2 = False
+        hotbarSlot3 = False
+        hotbarSlot4 = False
+        hotbarSlot5 = False
+        holster = False
+        
+    if store1x <= 100 and store1x >= 0 or store2x <= 100 and store2x >= 0:
+        if holster == False and hipfire == False and scopeScreen == False:
+            interactText = True
+            if key == simplegui.KEY_MAP["up"] or key == simplegui.KEY_MAP["w"]:
+                sitting = not sitting
+                standing = not standing
+                moveAbility = not moveAbility
+
+def key_handler(key):
+    global held_keys
+    held_keys.append(key)
+    action(key)
+    if not timer_on:
+        timer.start()
+
+def release_handler(key):
+    global held_keys
+    if key in held_keys:
+        held_keys.remove(key)
+    global timer_on
+    if len(held_keys)==0:
+        timer.stop()
+        timer2.stop()
+        timer_on=False
+        
+
+akey = simplegui.KEY_MAP['a']
+dkey = simplegui.KEY_MAP['d']
+leftkey = simplegui.KEY_MAP['left']
+rightkey = simplegui.KEY_MAP['right']
+
+
+timer = simplegui.create_timer(1, timer_handler)
+timer2 = simplegui.create_timer(200, timer2_handler)    
+                    
+
+# frame
+frame = simplegui.create_frame('Journeys: Wild West', width, height)
+frame.set_canvas_background("White")
+frame.set_draw_handler(draw_handler)
+frame.set_keydown_handler(key_handler)
+frame.set_keyup_handler(release_handler)
+frame.set_mouseclick_handler(click)
+frame.add_label("Controls: ")
+frame.add_label("A / Left Arrow: Move Left")
+frame.add_label("D / Right Arrow: Move Right")
+frame.add_label("W / Up Arrow: Interact")
+frame.add_label("1 / 2: Equip")
+frame.add_label("MB1 / SPACE: Shoot")
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("Leaderboard:")
+frame.start()
