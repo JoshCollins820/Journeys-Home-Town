@@ -1,0 +1,605 @@
+# Modules
+import simplegui, time, codeskulptor
+
+# Notes
+# Add player model (hoodie)
+# Add sun
+# Add background
+# Add cops system
+# Add cutting
+# Add porta potty
+# Add loyalty
+# Add speed affect with drugs
+# Different types of drugs
+# Stealing drugs
+# Customers
+# Phone
+# Drug supply
+# customers
+# samples
+
+
+# canvas resolution
+height = 600
+width = 600
+
+# speed
+speedMove = 100
+boardWalk = 80
+cloudMove = 8
+cloudAuto = 0.1
+
+# character default x-positions
+legLdefx = 250
+legRdefx = 250
+armLdefx = 250
+armRdefx = 250
+legWidth = 9
+
+# character default y-positions
+legLdefy = 405
+legRdefy = 405
+armLdefy = 360
+armRdefy = 360
+
+# background x-positions
+
+# clouds
+c11 = 100 
+c21 = 600
+
+# other
+bodyWeight = 12
+moneyCount = 7
+playerHP = 100
+hunger = 100
+
+# audio
+concrete = simplegui.load_sound('https://freesound.org/data/previews/475/475854_10132460-lq.mp3')
+concrete.set_volume(0.2)
+
+# TRUE FALSE STATEMENTS
+
+moveAbility = True
+notInBuilding = True
+interactText = False
+buyText = False
+sitting = False
+standing = True
+moneyPick1 = False
+moneyPickText1 = False
+showMoney1 = True
+worldLeft = False
+worldRight = False
+insufFundsText = False
+purchasedText = False
+startGame = False
+timer_on = False
+lookingRight = True
+lookingLeft = False
+
+hous1x = -330
+held_keys=[]
+attirex = 250
+
+
+
+def draw_handler(canvas):
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,car2x,hous1x,lookingRight,lookingLeft
+    if notInBuilding == True:
+        # sky
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(89, 167, 240)", "rgb(89, 167, 240")
+        #background roof left
+        canvas.draw_polygon([(hous1x + 530,470),(hous1x + 730,310),(hous1x + 930,470)], 3, "rgb(87, 67, 60)", "rgb(87, 67, 60)")
+        canvas.draw_polygon([(hous1x + 620,450),(hous1x + 620, 340),(hous1x + 660,340),(hous1x + 660,450)],3,"gray","gray") #chimney
+        #background roof right
+        canvas.draw_polygon([(hous1x + 1470,450),(hous1x + 1470, 325),(hous1x + 1510,325),(hous1x + 1510,450)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x + 1230,470),(hous1x + 1430,310),(hous1x + 1630,470)], 3, "rgb(60, 67, 79)", "rgb(60, 67, 79)")
+        
+        # concrete
+        canvas.draw_polygon([(0, height),(0, 403),(width, 403),(width, height)], 3, "rgb(122, 122, 122)", "rgb(122, 122, 122)")
+        canvas.draw_polygon([(0, height),(0, 420),(width, 420),(width, height)], 3, "rgb(92, 92, 92)", "rgb(92, 92, 92)")
+        #sidewalk break
+        canvas.draw_polygon([(hous1x + 900, 425),(hous1x + 900, 402),(hous1x + 1300, 402),(hous1x + 1300, 425)], 1, "rgb(51, 49, 48)", "rgb(51, 49, 48)")
+        
+        # street
+        canvas.draw_polygon([(0, height),(0, 425),(width, 425),(width, height)], 3, "rgb(51, 49, 48)", "rgb(51, 49, 48)")
+        # cloud 1
+        canvas.draw_circle((c11, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 20, 75), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 15, 120), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 50, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 45, 65), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 80, 100), 25, 5, "white", "white")
+        canvas.draw_circle((c11 + 85, 75), 25, 5, "white", "white")
+        # cloud 2
+        canvas.draw_circle((c21, 200), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 10, 205), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 15, 179), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 50, 170), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 45, 220), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 80, 185), 25, 5, "white", "white")
+        canvas.draw_circle((c21 + 85, 215), 25, 5, "white", "white") 
+ 
+        #bush left
+        canvas.draw_polygon([(hous1x - 2000,402),(hous1x - 2000,360),(hous1x + 820,360),(hous1x + 820,402)], 3, "rgb(90, 120, 76)", "rgb(90, 120, 76)") 
+        #bush right
+        canvas.draw_polygon([(hous1x + 1390,402),(hous1x + 1390,360),(hous1x + 4200,360),(hous1x + 4200,402)], 3, "rgb(90, 120, 76)", "rgb(90, 120, 76)") 
+        
+        #street sign
+        canvas.draw_line((hous1x + 810, 250),(hous1x + 810, 403),6,"rgb(102, 102, 102)")
+        canvas.draw_line((hous1x + 758.5, 250),(hous1x + 861.5, 250),23,"rgb(207, 207, 207)")
+        canvas.draw_line((hous1x + 760, 250),(hous1x + 860, 250),20,"rgb(79, 112, 83)")
+        canvas.draw_text("HUSTLE", (hous1x + 768,255), 15, "white")
+        canvas.draw_text("AVE", (hous1x + 831,254), 10, "white")
+        
+        # park left
+        # tree right
+        canvas.draw_polygon([(hous1x - 1420,402),(hous1x - 1400,50),(hous1x - 1360,50),(hous1x - 1340,402)], 3, "rgb(82, 69, 59)", "rgb(82, 69, 59)") # tree
+        canvas.draw_circle((hous1x - 1420,55), 75,5,"rgb(58, 102, 43)","rgb(58, 102, 43)")
+        canvas.draw_circle((hous1x - 1320,155), 85,5,"rgb(96, 163, 73)","rgb(96, 163, 73)")
+        canvas.draw_circle((hous1x - 1320,35), 75,5,"rgb(61, 138, 34)","rgb(61, 138, 34)")
+        canvas.draw_circle((hous1x - 1470,155), 85,5,"rgb(78, 130, 60)","rgb(78, 130, 60)")
+        canvas.draw_circle((hous1x - 1370,105), 75,5,"rgb(46, 97, 28)","rgb(46, 97, 28)")
+        # tree left
+        canvas.draw_polygon([(hous1x - 1790,402),(hous1x - 1770,50),(hous1x - 1730,50),(hous1x - 1710,402)], 3, "rgb(66, 57, 49)", "rgb(66, 57, 49)") # tree
+        canvas.draw_circle((hous1x - 1790,35), 75,5,"rgb(65, 107, 49)","rgb(65, 107, 49)")
+        canvas.draw_circle((hous1x - 1700,155), 85,5,"rgb(48, 110, 25)","rgb(48, 110, 25)")
+        canvas.draw_circle((hous1x - 1660,35), 75,5,"rgb(57, 87, 45)","rgb(57, 87, 45)")
+        canvas.draw_circle((hous1x - 1860,155), 85,5,"rgb(48, 102, 29)","rgb(48, 102, 29)")
+        canvas.draw_circle((hous1x - 1760,105), 75,5,"rgb(69, 138, 45)","rgb(69, 138, 45)") 
+        #bench
+        canvas.draw_line((hous1x - 1625,402),(hous1x - 1625, 365),9,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x - 1525,402),(hous1x - 1525, 365),9,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x - 1650,370),(hous1x - 1500, 370),10,"rgb(166, 142, 98)")
+        canvas.draw_line((hous1x - 1615,340),(hous1x - 1615, 365),8,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x - 1535,340),(hous1x - 1535, 365),8,"rgb(138, 117, 80)") 
+        canvas.draw_line((hous1x - 1645,345),(hous1x - 1505, 345),25,"rgb(166, 142, 98)")
+        
+        #park right
+        # tree right
+        canvas.draw_polygon([(hous1x + 3705,402),(hous1x + 3685,50),(hous1x + 3645,50),(hous1x + 3625,402)], 3, "rgb(82, 69, 59)", "rgb(82, 69, 59)") # tree
+        canvas.draw_circle((hous1x + 3625,55), 75,5,"rgb(58, 102, 43)","rgb(58, 102, 43)")
+        canvas.draw_circle((hous1x + 3725,155), 85,5,"rgb(96, 163, 73)","rgb(96, 163, 73)")
+        canvas.draw_circle((hous1x + 3725,35), 75,5,"rgb(61, 138, 34)","rgb(61, 138, 34)")
+        canvas.draw_circle((hous1x + 3575,155), 85,5,"rgb(78, 130, 60)","rgb(78, 130, 60)")
+        canvas.draw_circle((hous1x + 3675,105), 75,5,"rgb(46, 97, 28)","rgb(46, 97, 28)")
+        # tree left
+        canvas.draw_polygon([(hous1x + 3335,402),(hous1x + 3315,50),(hous1x + 3275,50),(hous1x + 3255,402)], 3, "rgb(66, 57, 49)", "rgb(66, 57, 49)") # tree
+        canvas.draw_circle((hous1x + 3255,35), 75,5,"rgb(65, 107, 49)","rgb(65, 107, 49)")
+        canvas.draw_circle((hous1x + 3345,155), 85,5,"rgb(48, 110, 25)","rgb(48, 110, 25)")
+        canvas.draw_circle((hous1x + 3385,35), 75,5,"rgb(57, 87, 45)","rgb(57, 87, 45)")
+        canvas.draw_circle((hous1x + 3185,155), 85,5,"rgb(48, 102, 29)","rgb(48, 102, 29)")
+        canvas.draw_circle((hous1x + 3285,105), 75,5,"rgb(69, 138, 45)","rgb(69, 138, 45)") 
+        #bench
+        canvas.draw_line((hous1x + 3520,402),(hous1x + 3520, 365),9,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x + 3420,402),(hous1x + 3420, 365),9,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x + 3545,370),(hous1x + 3395, 370),10,"rgb(166, 142, 98)")
+        canvas.draw_line((hous1x + 3510,340),(hous1x + 3510, 365),8,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x + 3430,340),(hous1x + 3430, 365),8,"rgb(138, 117, 80)")
+        canvas.draw_line((hous1x + 3540,345),(hous1x + 3400, 345),25,"rgb(166, 142, 98)")
+        
+
+        # house 1
+        canvas.draw_polygon([(hous1x,402),(hous1x,160),(hous1x + 400,160),(hous1x + 400,402)], 3, "rgb(212, 187, 152)", "rgb(212, 187, 152)") #walls
+        canvas.draw_polygon([(hous1x + 50,150),(hous1x + 50, 50),(hous1x + 100,50),(hous1x + 100,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x - 20,170),(hous1x + 200,10),(hous1x + 420,170)], 3, "rgb(128, 77, 59)", "rgb(128, 77, 59)") #roof
+        canvas.draw_polygon([(hous1x + 220,350),(hous1x + 220, 250),(hous1x + 360,250),(hous1x + 360,350)],3,"rgb(87, 79, 68)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x + 70,402),(hous1x + 70, 235),(hous1x + 170,235),(hous1x + 170,402)],2,"rgb(87, 79, 68)","rgb(135, 104, 80)") #door
+        canvas.draw_circle((hous1x + 160,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        # house 2
+        canvas.draw_polygon([(hous1x - 500,402),(hous1x - 500,160),(hous1x - 100,160),(hous1x - 100,402)], 3, "rgb(133, 89, 69)", "rgb(133, 89, 69)") #walls
+        canvas.draw_polygon([(hous1x - 450,150),(hous1x - 450, 50),(hous1x - 400,50),(hous1x - 400,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x - 520,170),(hous1x - 300,10),(hous1x - 80,170)], 3, "rgb(84, 66, 58)", "rgb(84, 66, 58)") #roof
+        canvas.draw_polygon([(hous1x - 450,350),(hous1x - 450, 250),(hous1x - 320,250),(hous1x - 320,350)],3,"rgb(84, 66, 53)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x - 250,402),(hous1x - 250, 235),(hous1x - 150,235),(hous1x - 150,402)],2,"rgb(84, 66, 53)","rgb(143, 131, 107)") #door
+        canvas.draw_circle((hous1x - 160,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        # house 3
+        canvas.draw_polygon([(hous1x + 1500,402),(hous1x + 1500,170),(hous1x + 2150,170),(hous1x + 2150,402)], 3, "rgb(69, 35, 33)", "rgb(69, 35, 33)")
+        canvas.draw_polygon([(hous1x + 1500,402),(hous1x + 1500,160),(hous1x + 1900,160),(hous1x + 1900,402)], 3, "rgb(87, 41, 38)", "rgb(87, 41, 38)")#walls
+        canvas.draw_polygon([(hous1x + 1550,150),(hous1x + 1550, 50),(hous1x + 1600,50),(hous1x + 1600,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x + 1480,170),(hous1x + 1700,50),(hous1x + 2100,50),(hous1x + 2180,170)], 3, "rgb(48, 40, 35)", "rgb(48, 40, 35)") #roof
+        canvas.draw_polygon([(hous1x + 1480,170),(hous1x + 1700,10),(hous1x + 1920,170)], 3, "rgb(61, 49, 42)", "rgb(61, 49, 42)") #roof
+        canvas.draw_polygon([(hous1x + 1950,345),(hous1x + 1950, 255),(hous1x + 2100,255),(hous1x + 2100,345)],3,"rgb(61, 30, 28)","rgb(150, 179, 172)") #window
+        canvas.draw_polygon([(hous1x + 1720,350),(hous1x + 1720, 250),(hous1x + 1860,250),(hous1x + 1860,350)],3,"rgb(61, 30, 28)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x + 1570,402),(hous1x + 1570, 235),(hous1x + 1670,235),(hous1x + 1670,402)],2,"rgb(61, 30, 28)","rgb(135, 104, 80)") #door
+        canvas.draw_circle((hous1x + 1660,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        # house 4
+        canvas.draw_polygon([(hous1x + 2250,402),(hous1x + 2250,160),(hous1x + 2650,160),(hous1x + 2650,402)], 3, "rgb(80, 97, 148)", "rgb(80, 97, 148)") #walls
+        canvas.draw_polygon([(hous1x + 2300,150),(hous1x + 2300, 50),(hous1x + 2350,50),(hous1x + 2350,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x + 2230,170),(hous1x + 2450,10),(hous1x + 2670,170)], 3, "rgb(199, 199, 199)", "rgb(199, 199, 199)") #roof
+        canvas.draw_polygon([(hous1x + 2470,350),(hous1x + 2470, 250),(hous1x + 2610,250),(hous1x + 2610,350)],3,"rgb(65, 78, 117)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x + 2320,402),(hous1x + 2320, 235),(hous1x + 2420,235),(hous1x + 2420,402)],2,"rgb(65, 78, 117)","rgb(138, 138, 138)") #door
+        canvas.draw_circle((hous1x + 2410,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        # house 5
+        canvas.draw_polygon([(hous1x + 2750,402),(hous1x + 2750,160),(hous1x + 3150,160),(hous1x + 3150,402)], 3, "rgb(186, 121, 63)", "rgb(186, 121, 63)") #walls
+        canvas.draw_polygon([(hous1x + 3050,150),(hous1x + 3050, 50),(hous1x + 3100,50),(hous1x + 3100,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x + 2730,170),(hous1x + 2950,10),(hous1x + 3170,170)], 3, "rgb(74, 64, 55)", "rgb(74, 64, 55)") #roof
+        canvas.draw_polygon([(hous1x + 2800,350),(hous1x + 2800, 250),(hous1x + 2940,250),(hous1x + 2940,350)],3,"rgb(156, 104, 58)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x + 3000,402),(hous1x + 3000, 235),(hous1x + 3100,235),(hous1x + 3100,402)],2,"rgb(156, 104, 58)","rgb(138, 138, 138)") #door
+        canvas.draw_circle((hous1x + 3090,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        # house 6
+        canvas.draw_polygon([(hous1x - 600,402),(hous1x - 600,170),(hous1x - 1250,170),(hous1x - 1250,402)], 3, "rgb(173, 171, 97)", "rgb(173, 171, 97)")
+        canvas.draw_polygon([(hous1x - 600,402),(hous1x - 600,160),(hous1x - 1000,160),(hous1x - 1000,402)], 3, "rgb(209, 207, 111)", "rgb(209, 207, 111)")#walls
+        canvas.draw_polygon([(hous1x - 650,150),(hous1x - 650, 50),(hous1x - 700,50),(hous1x - 700,150)],3,"gray","gray") #chimney
+        canvas.draw_polygon([(hous1x - 580,170),(hous1x - 800,50),(hous1x - 1200,50),(hous1x - 1280,170)], 3, "rgb(48, 40, 35)", "rgb(48, 40, 35)") #roof
+        canvas.draw_polygon([(hous1x - 580,170),(hous1x - 800,10),(hous1x - 1020,170)], 3, "rgb(61, 49, 42)", "rgb(61, 49, 42)") #roof
+        canvas.draw_polygon([(hous1x - 1050,345),(hous1x - 1050, 255),(hous1x - 1200,255),(hous1x - 1200,345)],3,"rgb(61, 30, 28)","rgb(150, 179, 172)") #window
+        canvas.draw_polygon([(hous1x - 820,350),(hous1x - 820, 250),(hous1x - 960,250),(hous1x - 960,350)],3,"rgb(61, 30, 28)","rgb(173, 204, 197)") #window
+        canvas.draw_polygon([(hous1x - 670,402),(hous1x - 670, 235),(hous1x - 770,235),(hous1x - 770,402)],2,"rgb(61, 30, 28)","rgb(135, 104, 80)") #door
+        canvas.draw_circle((hous1x - 760,330), 3, 3, "rgb(51, 50, 50)", "rgb(51, 50, 50)") #knob
+        
+        
+
+        
+        if standing == True:
+            speedMove = 50
+            # character model
+            # leg left
+            canvas.draw_line((legLdefx, legLdefy - 7.5), (legLdefx, legLdefy), legWidth, "rgb(10, 10, 10)")
+            canvas.draw_line((250,355),(legLdefx, legLdefy - 6), legWidth, "rgb(28, 28, 28)")   
+            # leg right
+            canvas.draw_line((legRdefx, legRdefy - 7.5), (legRdefx, legRdefy), legWidth, "rgb(10, 10, 10)")
+            canvas.draw_line((250,355),(legRdefx, legRdefy - 6), legWidth, "rgb(28, 28, 28)")
+            # arm left
+            canvas.draw_line((armLdefx, armLdefy - 7), (armLdefx + 0.5, armLdefy), 8, "rgb(189, 164, 119)")
+            canvas.draw_line((250, 300), (armLdefx, armLdefy - 6), 8, "rgb(41, 41, 41)")
+            # body
+            canvas.draw_line((250,357), (250,300), bodyWeight, "rgb(51, 51, 51)")
+            if lookingRight == True:
+                # backpack
+                canvas.draw_line((attirex - 11,338), (attirex - 11,304), 10, "rgb(28, 28, 28)")
+            if lookingLeft == True:
+                # backpack
+                canvas.draw_line((attirex + 11,338), (attirex + 11,304), 10, "rgb(28, 28, 28)")   
+            # arm right
+            canvas.draw_line((armRdefx, armRdefy - 7), (armRdefx - 0.5, armRdefy), 8, "rgb(189, 164, 119)")
+            canvas.draw_line((250, 300), (armRdefx, armRdefy - 6), 8, "rgb(41, 41, 41)")
+            # head
+            if lookingRight == True:
+                # hood
+                canvas.draw_circle((attirex,283), 18, 5, "rgb(41, 41, 41)", "rgb(41, 41, 41)")
+                # hair
+                canvas.draw_circle((attirex + 4,284), 14, 5, "rgb(97, 91, 70)", "rgb(97, 91, 70)")
+                # face
+                canvas.draw_circle((attirex + 5.5,287), 13, 5, "rgb(189, 164, 119)", "rgb(189, 164, 119)")
+                # beard
+                canvas.draw_polygon([(attirex + 2,290),(attirex + 6,294),(attirex + 17, 294),(attirex + 14,300),(attirex + 8,302),(attirex + 3,299)],4,"rgb(97, 91, 70)","rgb(97, 91, 70)")
+                # hood side
+                canvas.draw_line((attirex - 8,285), (attirex,305), 11, "rgb(41, 41, 41)")
+                canvas.draw_line((attirex - 11,287), (attirex,265), 11, "rgb(41, 41, 41)")
+                canvas.draw_line((attirex - 4,296), (attirex,265), 10, "rgb(41, 41, 41)")
+            if lookingLeft == True:
+                # hood
+                canvas.draw_circle((attirex,283), 18, 5, "rgb(41, 41, 41)", "rgb(41, 41, 41)")
+                # hair
+                canvas.draw_circle((attirex - 4,284), 14, 5, "rgb(97, 91, 70)", "rgb(97, 91, 70)")
+                # face
+                canvas.draw_circle((attirex - 5.5,287), 13, 5, "rgb(189, 164, 119)", "rgb(189, 164, 119)")
+                # beard
+                canvas.draw_polygon([(attirex - 2,290),(attirex - 6,294),(attirex - 17, 294),(attirex - 14,300),(attirex - 8,302),(attirex - 3,299)],4,"rgb(97, 91, 70)","rgb(97, 91, 70)")
+                # hood side
+                canvas.draw_line((attirex + 8,285), (attirex,305), 11, "rgb(41, 41, 41)")
+                canvas.draw_line((attirex + 11,287), (attirex,265), 11, "rgb(41, 41, 41)")
+                canvas.draw_line((attirex + 4,296), (attirex,265), 10, "rgb(41, 41, 41)")
+            
+            
+            
+            
+        # red car
+        # top
+        canvas.draw_polygon([(hous1x + 550, 480),(hous1x + 565,500),(hous1x + 285, 500),(hous1x + 300, 480)], 4, "rgb(176, 91, 91)", "rgb(176, 91, 91")
+        # hood and trunk
+        canvas.draw_polygon([(hous1x + 650, 572),(hous1x + 620,540),(hous1x + 230, 540),(hous1x + 200, 572)], 4, "rgb(176, 91, 91)", "rgb(176, 91, 91")
+        # side
+        canvas.draw_polygon([(hous1x + 652, 575),(hous1x + 652,630),(hous1x + 198, 630),(hous1x + 198, 575)], 4, "rgb(140, 79, 79)", "rgb(140, 79, 79")
+        # window
+        canvas.draw_polygon([(hous1x + 585, 570),(hous1x + 565,504),(hous1x + 285, 504),(hous1x + 265, 570)], 8, "rgb(140, 79, 79)", "rgb(141, 169, 184")  
+        # middle window part
+        canvas.draw_line((hous1x + 430, 570),(hous1x + 430,504), 35, "rgb(140, 79, 79)")
+        # wheels
+        canvas.draw_circle((hous1x + 280, 630), 30, 20, "rgb(18, 18, 18)", "rgb(28, 28, 28)")
+        canvas.draw_circle((hous1x + 570, 630), 30, 20, "rgb(18, 18, 18)", "rgb(28, 28, 28)")
+            
+            
+
+        # For Loop // Default Limb Placement
+        for i in range(0,1):
+            time.sleep(0.07)
+            
+            # LIMB RESET
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360 
+            # CLOUD AUTO MOVE
+            c11 -= cloudAuto
+            if c11 + 85 <= -100:
+                c11 = 800
+            c21 -= cloudAuto
+            if c21 + 85 <= -100:
+                c21 = 1100
+      
+    for i in range(0,1):
+        if bodyWeight > 12:
+            bodyWeight = bodyWeight - 0.005
+ 
+    if sitting == True:
+        standing = False
+        # leg left
+        canvas.draw_line((260,360),(260, 405), legWidth, "Black")   
+        # leg right
+        canvas.draw_line((240,360),(240, 405), legWidth, "Black")
+        # body
+        canvas.draw_line((250,370), (250,330), bodyWeight, "Black")
+        # head
+        canvas.draw_circle((250,311), 18, 5, "Black", "Black")
+        # arm left
+        canvas.draw_line((255, 330), (265, 365), 8, "Black")
+        # arm right
+        canvas.draw_line((245, 330), (235, 365), 8, "Black")
+            
+    if moneyPick1 == True:
+        showMoney1 = False
+        
+    if insufFundsText == True:
+        canvas.draw_text("Insufficient Funds", (101,217), 14, "Red")
+        
+    if purchasedText == True:
+        canvas.draw_text("Purchased!", (120,235), 14, "Green")
+        
+    if interactText == True:
+        if sitting == True:
+            canvas.draw_text("INTERACT", (121,283), 12, "Black")
+        else:
+            canvas.draw_text("INTERACT", (121,255), 12, "Black")
+            
+    if buyText == True:
+        canvas.draw_text("BUY", (137,255), 12, "Black")
+            
+    # HUD        
+    #canvas.draw_text("MONEY: $" + str(moneyCount), (460,25), 20, "Black")
+    
+    # HUD  
+    if startGame == True:
+        
+        # Health
+        canvas.draw_circle((15,536),4.2,1,"rgb(191, 38, 64)","rgb(191, 38, 64)")
+        canvas.draw_circle((25,536),4.2,1,"rgb(191, 38, 64)","rgb(191, 38, 64)")
+        canvas.draw_line((13,538),(20,546),3.85,"rgb(191, 38, 64)")
+        canvas.draw_line((27,538),(20,546),3.85,"rgb(191, 38, 64)")
+        canvas.draw_line((20,536),(20,548),2,"rgb(191, 38, 64)")
+        canvas.draw_line((16,540),(24,540),6,"rgb(191, 38, 64)")
+        # Health Values
+        canvas.draw_text(str(playerHP),(35,546), 18, "Black")
+        canvas.draw_text(str(playerHP),(34,545), 18, "White")
+        # Hunger
+        canvas.draw_circle((16,557),4.9,1,"rgb(148, 120, 46)","rgb(148, 120, 46)")
+        canvas.draw_circle((18,559),4.5,1,"rgb(148, 120, 46)","rgb(148, 120, 46)")
+        canvas.draw_circle((20,561),4,1,"rgb(148, 120, 46)","rgb(148, 120, 46)")
+        canvas.draw_circle((23,564),2,1,"rgb(148, 120, 46)","rgb(148, 120, 46)")
+        canvas.draw_line((23,564),(27,568),2.2,"white")
+        canvas.draw_circle((28,567),1.3,1,"white","white")
+        canvas.draw_circle((26,569),1.3,1,"white","white")
+        # Hunger Values
+        canvas.draw_text(str(hunger),(35,569), 18, "Black")
+        canvas.draw_text(str(hunger),(34,568), 18, "White")
+        # Money
+        canvas.draw_polygon([(11,578),(30,578),(30,586),(11,586)],1.5,"rgb(7, 82, 9)","rgb(19, 135, 28)")
+        # Money Values
+        canvas.draw_text("$" + str(moneyCount), (36,588), 17, "Black")
+        canvas.draw_text("$" + str(moneyCount), (35,587), 17, "White")
+    
+    if startGame == False:
+        canvas.draw_text("JOURNEYS:", (101,186), 30, "black")
+        canvas.draw_text("JOURNEYS:", (100,185), 30, "white")
+        canvas.draw_text("HUSTLE AVENUE", (267,186), 30, "black")
+        canvas.draw_text("HUSTLE AVENUE", (266,185), 30, "rgb(84, 84, 84)")
+        canvas.draw_text("Click Here to PLAY", (230,215), 18, "white")
+        moveAbility = False
+        carSpeed = 0
+        pedWalk = 0
+    elif startGame == True:
+        carSpeed = 100
+        pedWalk = 5
+    
+def worldLeft():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,hous1x,car2x 
+    
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+    c11 += cloudMove
+    if c11 + 85 >= 800:
+        c11 = -100
+    c21 += cloudMove
+    if c21 + 85 >= 800:
+        c21 = -100
+        
+    hous1x += speedMove
+
+
+def worldRight():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,hous1x,car2x
+    if standing == True:
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+
+    c11 -= cloudMove
+    if c11 + 85 <= -100:
+        c11 = 800
+    c21 -= cloudMove
+    if c21 + 85 <= -100:
+        c21 = 1100
+
+    hous1x -= speedMove
+
+    
+
+def walkRight():
+    global speedMove, cloudMove,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,buyText,insufFundsText,worldLeft,worldRight,purchasedText,notInBuilding
+
+    if moveAbility == True:
+        worldRight()
+        moneyPickText1 = False
+        interactText = False 
+        insufFundsText = False
+        purchasedText = False
+        buyText = False
+        concrete.rewind()
+        concrete.play()
+        
+    for i in range(0,1):
+        interactText = False
+        
+
+         
+def walkLeft():
+    global speedMove, cloudMove,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,buyText,insufFundsText,worldLeft,worldRight,purchasedText,notInBuilding,hous1x
+
+    if moveAbility == True:
+        worldLeft()
+        moneyPickText1 = False
+        interactText = False 
+        insufFundsText = False
+        purchasedText = False
+        buyText = False
+        concrete.rewind()
+        concrete.play()
+        
+    for i in range(0,1):
+        interactText = False
+
+
+def click(click):
+    global moneyCount,hpPotionCount,shopUI,startGame,potionEquip,moveAbility,playerMana,swordEquip,blazeOwn,hotbarSlot2,hotbarSlot6,dead,holster,hipfire,bulletx,hotbarSlot1,lookingLeft,lookingRight,bullets,scopeScreen
+    if startGame == False:
+        startGame = True
+        moveAbility = True
+
+# interact function for button    
+def interact():
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText 
+
+def keyup(key):
+    global moveAbility
+
+    
+    
+ #key down function
+def keydown(key):
+    global height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,worldLeft,worldRight,purchasedText,insufFundsText,buyText,hous1x
+    if key == simplegui.KEY_MAP["d"] or key == simplegui.KEY_MAP["right"] or key == simplegui.KEY_MAP["D"]:
+        if moveAbility == True:
+            walkRight()
+
+    if key == simplegui.KEY_MAP["a"] or key == simplegui.KEY_MAP["left"] or key == simplegui.KEY_MAP["A"]:   
+        if moveAbility == True:
+            walkLeft()
+
+            
+    # cul de sac loop 
+    if (hous1x) >= 1900:
+        hous1x = -3150
+    elif (hous1x) <= -3200:
+        hous1x = 1850
+
+            
+
+        
+def timer_handler():
+    if not timer_on:
+        timer2.start()
+    timer.stop()
+
+def timer2_handler():
+    global timer_on
+    timer_on=True
+    if len(held_keys)==0:
+        timer2.stop()
+        timer_on=False
+    else:
+        for item in held_keys:
+            action(item)
+
+def action(key):
+    global speedMove, cloudMove,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,buyText,insufFundsText,worldLeft,worldRight,purchasedText,notInBuilding,height,width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,hous1x,lookingLeft,lookingRight
+
+    if key == leftkey or key == akey:
+        if moveAbility == True:
+            walkLeft()
+            lookingLeft = True
+            lookingRight = False
+
+    elif key == rightkey or key == dkey:
+        if moveAbility == True:
+            walkRight()
+            lookingLeft = False
+            lookingRight = True
+            
+            
+    # cul de sac loop 
+    if (hous1x) >= 1900:
+        hous1x = -3150
+    elif (hous1x) <= -3200:
+        hous1x = 1850
+
+def key_handler(key):
+    global held_keys,speedMove, cloudMove,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,buyText,insufFundsText,worldLeft,worldRight,purchasedText,notInBuilding,height,width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy
+
+    held_keys.append(key)
+    action(key)
+    if not timer_on:
+        timer.start()
+
+def release_handler(key):
+    global held_keys,speedMove, cloudMove,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,moneyPick1,showMoney1,moneyPickText1,buyText,insufFundsText,worldLeft,worldRight,purchasedText,notInBuilding,height,width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy
+    
+    if key in held_keys:
+        held_keys.remove(key)
+    global timer_on
+    if len(held_keys)==0:
+        timer.stop()
+        timer2.stop()
+        timer_on=False
+
+
+akey = simplegui.KEY_MAP['a']
+dkey = simplegui.KEY_MAP['d']
+leftkey = simplegui.KEY_MAP['left']
+rightkey = simplegui.KEY_MAP['right']
+
+
+timer = simplegui.create_timer(50, timer_handler)
+timer2 = simplegui.create_timer(150, timer2_handler)
+    
+                    
+
+# frame
+frame = simplegui.create_frame('Journeys: Hustle Avenue', width, height)
+frame.set_canvas_background("White")
+frame.set_draw_handler(draw_handler)
+frame.set_keydown_handler(key_handler)
+frame.set_keyup_handler(release_handler)
+frame.set_mouseclick_handler(click)
+frame.add_label("Controls: ")
+frame.add_label("A / Left Arrow: Move Left")
+frame.add_label("D / Right Arrow: Move Right")
+frame.add_label("W / Up Arrow: Interact")
+frame.add_label("S / Down Arrow: Ride")
+frame.start()
