@@ -1,0 +1,1596 @@
+# Modules
+import simplegui, time, codeskulptor, random
+
+# Global Variables
+
+# canvas resolution
+height = 600
+width = 600
+
+# speed
+speedMove = 50
+boardWalk = 80
+cloudMove = 15
+cloudAuto = 0.1
+
+zombieMove = 3
+zombie2Move = 3.8
+zombie3Move = 3.3
+zombie4Move = 3.7
+zombieB1Move = 4.5
+
+# character default x-positions
+headx = 250
+legLdefx = 250
+legRdefx = 250
+armLdefx = 250
+armRdefx = 250
+legWidth = 9
+
+# character default y-positions
+heady = 283
+legLdefy = 405
+legRdefy = 405
+armLdefy = 360
+armRdefy = 360
+
+
+# cloud 1 
+c11 = 100
+# cloud 2 
+c21 = 600
+
+# sword 1
+swordx1 = 280
+
+# sword equip
+swordWalkx1 = 315
+swordWalkx2 = 315
+swordWalkx3 = 245
+swordWalkx4 = 260
+swordWalkx5 = 326
+swordWalkx6 = 323
+swordWalkx7 = 320
+swordWalkx8 = 260
+swordWalky1 = 358
+swordWalky2 = 358
+swordWalky3 = 358
+swordWalky4 = 348
+swordWalky5 = 358
+swordWalky6 = 358
+swordWalky7 = 358
+swordWalky8 = 368
+
+hpPotHandx = 260
+
+zomx1 = 590
+zomx2 = 589
+zomx3 = 540  
+
+zom2x1 = 1190
+zom2x2 = 1189
+zom2x3 = 1140 
+
+zom3x1 = 1690
+zom3x2 = 1689
+zom3x3 = 1640 
+
+zom4x1 = 2090
+zom4x2 = 2089
+zom4x3 = 2040 
+
+zomB1x1 = 2890
+zomB1x2 = 2889
+zomB1x3 = 2840 
+
+zomArm = 0
+zom2Arm = 0
+zom3Arm = 0
+zom4Arm = 0
+zomB1Arm = 0
+
+# health
+playerHP = 100
+playerMana = 100
+manaRegen = 1
+
+blazeDamage = 30
+
+zomHP = 50
+zom2HP = 100
+zom3HP = 70
+zom4HP = 130
+zomB1HP = 600
+
+bodyWeight = 12
+moneyCount = 0
+xpCount = 0
+level = 1
+scoreCount = 0
+
+hpPotionCount = 0
+
+blazeOwnStatus = "Locked"
+
+# SOUNDS
+
+step = simplegui.load_sound('https://freesound.org/data/previews/469/469155_9634718-lq.mp3')
+step.set_volume(0.45)
+zomhit = simplegui.load_sound('https://freesound.org/data/previews/461/461048_147613-lq.mp3')
+zomhit.set_volume(0.45)
+playerhit = simplegui.load_sound('https://freesound.org/data/previews/416/416839_8247784-lq.mp3')
+playerhit.set_volume(0.4)
+hurt = simplegui.load_sound('https://freesound.org/data/previews/488/488424_5382295-lq.mp3')
+hurt.set_volume(0.6)
+swordpickup = simplegui.load_sound('https://freesound.org/data/previews/471/471147_9938764-lq.mp3')
+swordpickup.set_volume(0.6)
+swordequip = simplegui.load_sound('https://freesound.org/data/previews/484/484298_1738686-lq.mp3')
+swordequip.set_volume(0.3)
+swing = simplegui.load_sound('https://freesound.org/data/previews/389/389590_6512973-lq.mp3')
+swing.set_volume(0.6)
+zomprox = simplegui.load_sound('https://freesound.org/data/previews/189/189281_1325505-lq.mp3')
+zomprox.set_volume(0.8)
+zom2prox = simplegui.load_sound('https://freesound.org/data/previews/189/189281_1325505-lq.mp3')
+zom2prox.set_volume(0.8)
+zom3prox = simplegui.load_sound('https://freesound.org/data/previews/396/396046_4530523-lq.mp3')
+zom3prox.set_volume(0.8)
+zom4prox = simplegui.load_sound('https://freesound.org/data/previews/189/189281_1325505-lq.mp3')
+zom4prox.set_volume(0.8)
+zomb1prox = simplegui.load_sound('https://freesound.org/data/previews/315/315847_5370566-lq.mp3')
+zomb1prox.set_volume(0.4)
+death = simplegui.load_sound('https://freesound.org/data/previews/270/270446_5123851-lq.mp3')
+death.set_volume(0.3)
+fire = simplegui.load_sound('https://freesound.org/data/previews/442/442872_71257-lq.mp3')
+fire.set_volume(0.6)
+potion = simplegui.load_sound('https://freesound.org/data/previews/41/41529_108319-lq.mp3')
+potion.set_volume(0.3)
+firehold = simplegui.load_sound('https://freesound.org/data/previews/234/234288_3120802-lq.mp3')
+firehold.set_volume(0.3)
+levelup = simplegui.load_sound('https://freesound.org/data/previews/439/439889_2995485-lq.mp3')
+levelup.set_volume(0.3)
+buy = simplegui.load_sound('https://freesound.org/data/previews/342/342751_5260872-lq.mp3')
+buy.set_volume(0.2)
+potequip = simplegui.load_sound('https://freesound.org/data/previews/256/256568_2579844-lq.mp3')
+potequip.set_volume(0.2)
+music = simplegui.load_sound('https://freesound.org/data/previews/183/183881_9497060-lq.mp3')
+music.set_volume(0.1)
+button = simplegui.load_sound('https://freesound.org/data/previews/485/485486_10145800-lq.mp3')
+button.set_volume(0.5)
+zomdie = simplegui.load_sound('https://freesound.org/data/previews/163/163447_2943714-lq.mp3')
+zomdie.set_volume(0.3)
+
+
+# TRUE FALSE STATEMENTS
+
+moveAbility = True
+notInBuilding = True
+insideHouse = False
+interactText = False
+standing = True
+worldLeft = False
+worldRight = False
+dead = False
+swordOwn = False
+swordText = False
+swordEquip = False
+lookingLeft = False
+lookingRight = True
+hotbarSlot1 = False  
+hotbarSlot2 = False
+hotbarSlot3 = False
+hotbarSlot4 = False
+hotbarSlot5 = False
+hotbarSlot6 = False
+gainXP = False
+levelUp1 = False
+levelUp2 = False
+levelUp1Text = False 
+levelUp2Text = False
+shopUI = False
+page1 = True
+page2 = False
+hpPotionDrink = False 
+potionEquip = False
+startGame = False
+blazeUse = False   
+blazeOwn = False
+blazeText = False
+musicMute = False
+audioDamp = False
+debugMode = False
+timer_on=False
+held_keys=[]
+
+
+def draw_handler(canvas):
+    global scoreCount, debugMode, height, width,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,interactText,moveAbility,sitting,standing,bodyWeight,moneyCount,levelUp2,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,hpPotx1,hpPotx2,hpPotx3,level,hpPotHandx,manaRegen,step,musicMute,audioDamp
+    global playerHP,worldLeft,worldRight,purchasedText,healthColor,buyText,dead,swordx1,swordText,swordEquip,lookingLeft,lookingRight,zomx1,zomx2,zomx3,zomHP,zombieMove,gainXP,zomArm,xpCount,zom2x1,zom2x2,zom2x3,levelUp1Text,levelUp2Text,shopUI,zombieMove,zombie2Move,zombie3Move,zombieB1Move,startGame,blazeUse,blazeOwn,blazeFx,blazeText,blazeOwnStatus
+    global swordWalkx1,swordWalkx2,swordWalkx3,swordWalkx4,swordWalkx5,swordWalkx6,swordWalkx7,swordWalkx8,swordWalky1,swordWalky2,swordWalky3,swordWalky4,swordWalky5,swordWalky6,swordWalky7,swordWalky8,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,levelUp1,zom2HP,zom2Arm,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,hpSparkx,potionEquip,zom4HP,zom4x1,zom4x2,zom4x3,zom4Arm,zombie4Move,playerMana
+    if notInBuilding == True:
+        # ground (night)
+        canvas.draw_polygon([(0, height),(0, 400),(width, 400),(width, height)], 3, "rgb(73, 92, 75)", "rgb(73, 92, 75)")
+
+        # soil (night)
+        canvas.draw_polygon([(0, height),(0, 435),(width, 435),(width, height)], 3, "rgb(87, 73, 66)", "rgb(87, 73, 66)")
+
+        # sky (night)
+        canvas.draw_polygon([(0, 401),(0, 0),(width, 0),(width, 401)], 3, "rgb(38, 38, 38)", "rgb(38, 38, 38")
+
+        # cloud 1
+        canvas.draw_circle((c11, 100), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 20, 75), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 15, 120), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 50, 100), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 45, 65), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 80, 100), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c11 + 85, 75), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+
+        # cloud 2
+        canvas.draw_circle((c21, 200), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 10, 205), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 15, 179), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 50, 170), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 45, 220), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 80, 185), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        canvas.draw_circle((c21 + 85, 215), 25, 5, "rgb(138, 138, 138)", "rgb(138, 138, 138)")
+        
+        if startGame == True:
+            # inventory
+            # Back drop
+            canvas.draw_polygon([(150,535),(150,585),(250,585),(250,535)], 2, "Gray", "Gray")
+            canvas.draw_polygon([(400,535),(400,585),(450,585),(450,535)], 2, "Gray", "Gray")
+            # Outline
+            canvas.draw_polygon([(150,585),(150,535),(250,535),(250,586)], 3, "white")
+            canvas.draw_polygon([(400,585),(400,535),(450,535),(450,586)], 3, "white")
+            # Mid Vertical
+            canvas.draw_line((200, 534), (200, 586), 3, "white")
+            canvas.draw_line((250, 534), (250, 586), 3, "white")
+            canvas.draw_line((400, 534), (400, 586), 3, "white")
+            # Numbers
+            canvas.draw_text("1", (188,580), 15, "white")
+            canvas.draw_text("2", (238,580), 15, "white")
+            canvas.draw_text("Q", (437,580), 13, "white")
+        
+        
+       
+        
+        
+        if hotbarSlot1 == True:
+            canvas.draw_polygon([(150,585),(150,535),(200,535),(200,585)],3,"rgb(125, 240, 17)")
+
+        if hotbarSlot2 == True:
+            canvas.draw_polygon([(250,585),(250,535),(200,535),(200,585)],3,"rgb(125, 240, 17)")
+            
+        if hotbarSlot6 == True:
+            canvas.draw_polygon([(450,585),(450,535),(400,535),(400,585)],3,"rgb(125, 240, 17)")
+            
+        # Items
+        if swordOwn == True:
+            # Sword in slot 1
+            canvas.draw_line((174,540),(174,579), 2, "white")
+            canvas.draw_line((174,545),(174,579), 3.3, "white")
+            canvas.draw_line((174,550),(174,579), 4, "white")
+            canvas.draw_line((168,570),(180,570), 2.5, "white")
+            
+        if blazeOwn == True:
+            canvas.draw_circle((220,550),7,5,"rgb(238, 245, 59)","rgb(238, 245, 59)")
+            canvas.draw_circle((220,568),8,5,"rgb(230, 189, 28)","rgb(230, 189, 28)")
+            canvas.draw_circle((230,562),7,5,"rgb(224, 153, 22)","rgb(224, 153, 22)")
+            
+            
+        if hpPotionCount > 0:
+            # HP Potion in slot
+            canvas.draw_circle((425,565),11,6,"white","white")
+            canvas.draw_circle((425,565),10,5,"rgb(222, 95, 95)","rgb(222, 95, 95)")
+            canvas.draw_line((424.5,565),(424.5,550),10,"rgb(222, 95, 95)")
+            canvas.draw_line((424.5,545),(424.5,550),10,"white")
+            canvas.draw_line((424.5,546),(424.5,541),13,"rgb(130, 103, 66)")
+            canvas.draw_line((423,563),(428,557),1,"white")
+            canvas.draw_line((425.5,564),(429,560),1,"white")
+            canvas.draw_text(str(hpPotionCount), (404,549), 15, "white")                 
+        
+        # sword on ground
+        if swordOwn == False:
+            canvas.draw_line((swordx1, 400), (swordx1 + 70, 400), 6, "white")
+            canvas.draw_line((swordx1 + 20, 390), (swordx1 + 20, 410), 3.5, "white")
+            canvas.draw_line((swordx1, 398), (swordx1, 402), 4, "white")
+            canvas.draw_line((swordx1 + 70, 400), (swordx1 + 74, 400), 4.8, "white")
+            canvas.draw_line((swordx1 + 70, 400), (swordx1 + 78, 400), 4.6, "white")
+            canvas.draw_line((swordx1 + 70, 400), (swordx1 + 82, 400), 4.4, "white")
+            canvas.draw_line((swordx1 + 70, 400), (swordx1 + 87, 400), 4.2, "white")
+            canvas.draw_line((swordx1 + 70, 400), (swordx1 + 90, 400), 2, "white")
+ 
+        if swordEquip == True:
+            canvas.draw_line((swordWalkx1, swordWalky1), (swordWalkx5, swordWalky5), 2, "white")
+            canvas.draw_line((swordWalkx2, swordWalky2), (swordWalkx6, swordWalky6), 4, "white")
+            canvas.draw_line((swordWalkx3, swordWalky3), (swordWalkx7, swordWalky7), 6, "white")
+            canvas.draw_line((swordWalkx4, swordWalky4), (swordWalkx8, swordWalky8), 3.5, "white")
+            
+            
+        if potionEquip == True: 
+            canvas.draw_circle((hpPotHandx,355),11,6,"white","white")
+            canvas.draw_circle((hpPotHandx,355),10,5,"rgb(222, 95, 95)","rgb(222, 95, 95)")
+            canvas.draw_line((hpPotHandx - 0.5,355),(hpPotHandx - 0.5,340),10,"rgb(222, 95, 95)")
+            canvas.draw_line((hpPotHandx - 0.5,335),(hpPotHandx - 0.5,340),10,"white")
+            canvas.draw_line((hpPotHandx - 0.5,336),(hpPotHandx - 0.5,331),13,"rgb(130, 103, 66)")
+            canvas.draw_line((hpPotHandx - 2,353),(hpPotHandx + 3,347),1,"white")
+            canvas.draw_line((hpPotHandx + 0.5,354),(hpPotHandx + 4,350),1,"white")
+            
+        if hpPotionDrink == True:
+            canvas.draw_circle((hpPotx1,270),11,6,"white","white")
+            canvas.draw_circle((hpPotx1,270),10,5,"rgb(222, 95, 95)","rgb(222, 95, 95)")
+            canvas.draw_line((hpPotx2,273),(hpPotx3,280),10,"rgb(222, 95, 95)")
+            canvas.draw_text("*",(hpSparkx,220), 20, "rgb(86, 230, 78)")
+            canvas.draw_text("*",(hpSparkx + 50,251), 15, "rgb(34, 235, 23)")
+            canvas.draw_text("*",(hpSparkx - 55,320), 20, "rgb(86, 230, 78)")
+            canvas.draw_text("*",(hpSparkx + 55,320), 15, "rgb(34, 235, 23)")
+            canvas.draw_text("*",(hpSparkx - 40,240), 10, "rgb(34, 235, 23)")
+            
+        
+
+        # ZOMBIE #1 Alive
+        if zomHP > 0:
+            canvas.draw_text("Level 1 Zombie", (zomx1 - 45,240), 14, "rgb(150, 240, 41)")
+            canvas.draw_text("HP: " + str(zomHP), (zomx1 - 22,255), 14, "white")
+            # body
+            canvas.draw_line((zomx1,360), (zomx1,300), 14, "rgb(186, 176, 168)")
+            # leg left
+            canvas.draw_line((zomx1,360),(zomx1, 405), 12, "rgb(139, 144, 153)")   
+            # leg right
+            canvas.draw_line((zomx1,360),(zomx1, 405), 12, "rgb(139, 144, 153)")
+            # head
+            canvas.draw_circle((zomx2,283), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            # arm left
+            canvas.draw_line((zomx1, 310), (zomx3 + zomArm, 310), 9, "rgb(72, 105, 27)")
+            
+        # ZOMBIE #2 Alive
+        if zom2HP > 0:
+            canvas.draw_text("Level 3 Zombie", (zom2x1 - 45,240), 14, "rgb(41, 240, 77)")
+            canvas.draw_text("HP: " + str(zom2HP), (zom2x1 - 22,255), 14, "white")
+            # body
+            canvas.draw_line((zom2x1,360), (zom2x1,300), 14, "rgb(214, 209, 169)")
+            # leg left
+            canvas.draw_line((zom2x1,360),(zom2x1, 405), 12, "rgb(139, 144, 153)")   
+            # leg right
+            canvas.draw_line((zom2x1,360),(zom2x1, 405), 12, "rgb(139, 144, 153)")
+            # head
+            canvas.draw_circle((zom2x2,283), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            # arm left
+            canvas.draw_line((zom2x1, 310), (zom2x3 + zom2Arm, 310), 9, "rgb(72, 105, 27)")
+            
+        # ZOMBIE #3 Alive
+        if zom3HP > 0:
+            canvas.draw_text("Level 2 Zombie", (zom3x1 - 45,240), 14, "rgb(91, 235, 96)")
+            canvas.draw_text("HP: " + str(zom3HP), (zom3x1 - 22,255), 14, "white")
+            # body
+            canvas.draw_line((zom3x1,360), (zom3x1,300), 14, "rgb(141, 152, 181)")
+            # leg left
+            canvas.draw_line((zom3x1,360),(zom3x1, 405), 12, "rgb(87, 89, 94)")   
+            # leg right
+            canvas.draw_line((zom3x1,360),(zom3x1, 405), 12, "rgb(87, 89, 94)")
+            # head
+            canvas.draw_circle((zom3x2,283), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            # arm left
+            canvas.draw_line((zom3x1, 310), (zom3x3 + zom3Arm, 310), 9, "rgb(72, 105, 27)")\
+            
+        # ZOMBIE #4 Alive
+        if zom4HP > 0:
+            canvas.draw_text("Level 7 Zombie", (zom4x1 - 45,240), 14, "rgb(91, 235, 96)")
+            canvas.draw_text("HP: " + str(zom4HP), (zom4x1 - 22,255), 14, "white")
+            # body
+            canvas.draw_line((zom4x1,360), (zom4x1,300), 14, "rgb(141, 152, 181)")
+            # leg left
+            canvas.draw_line((zom4x1,360),(zom4x1, 405), 12, "rgb(87, 89, 94)")   
+            # leg right
+            canvas.draw_line((zom4x1,360),(zom4x1, 405), 12, "rgb(87, 89, 94)")
+            # head
+            canvas.draw_circle((zom4x2,283), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            # arm left
+            canvas.draw_line((zom4x1, 310), (zom4x3 + zom4Arm, 310), 9, "rgb(72, 105, 27)")
+
+        # ZOMBIE Boss 1 Alive
+        if zomB1HP > 0:
+            canvas.draw_text("Level 27 Zombie Boss", (zomB1x1 - 70,120), 16, "rgb(224, 4, 4)")
+            canvas.draw_text("HP: " + str(zomB1HP), (zomB1x1 - 28,140), 16, "white")
+            # leg left
+            canvas.draw_line((zomB1x1 + 60,305),(zomB1x1 + 60, 405), 50, "rgb(87, 89, 94)")
+            # body
+            canvas.draw_line((zomB1x1 + 55,260), (zomB1x1,210), 53, "rgb(141, 152, 181)")
+            canvas.draw_line((zomB1x1 + 60,320), (zomB1x1+ 40,210), 55, "rgb(141, 152, 181)")
+            canvas.draw_polygon([(zomB1x1+ 20,220),(zomB1x1 + 10,189),(zomB1x1 + 63,206),(zomB1x1 + 55,220)], 5, "rgb(141, 152, 181)","rgb(141, 152, 181)")
+            # head
+            canvas.draw_circle((zomB1x2 - 16,283 - 81), 22, 35, "rgb(98, 122, 65)", "rgb(98, 122, 65)")
+            # arm left
+            canvas.draw_line((zomB1x1 + 55, 210), (zomB1x3, 300), 35, "rgb(98, 122, 65)")
+
+        # PLAYER MODEL
+        if standing == True:
+            speedMove = 50
+            # character model
+            # leg left
+            canvas.draw_line((250,360),(legLdefx, legLdefy), legWidth, "white")   
+            # leg right
+            canvas.draw_line((250,360),(legRdefx, legRdefy), legWidth, "white")
+            # body
+            canvas.draw_line((250,365), (250,300), bodyWeight, "white")
+            # head
+            canvas.draw_circle((headx,heady), 18, 5, "white", "white")
+            # arm left
+            canvas.draw_line((250, 300), (armLdefx, armLdefy), 8, "white")
+            # arm right
+            canvas.draw_line((250, 300), (armRdefx, armRdefy), 8, "white")
+            
+        # ZOMBIE #1 Dead   
+        if zomHP <= 0:
+            # leg left
+            canvas.draw_line((zomx1 - 55,400),(zomx1 + 70, 400), 10, "rgb(139, 144, 153)")  
+            # body
+            canvas.draw_line((zomx1,400), (zomx1 + 70,400), 12, "rgb(186, 176, 168)")
+            # blood
+            canvas.draw_line((zomx1 + 13,395), (zomx1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            # head
+            canvas.draw_circle((zomx1 + 69,398), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            # arm left
+            canvas.draw_line((zomx1 + 5, 405), (zomx1 + 45, 403), 9, "rgb(72, 105, 27)")
+            
+        # ZOMBIE #2 Dead
+        if zom2HP <= 0:
+            canvas.draw_line((zom2x1 - 55,400),(zom2x1 + 70, 400), 10, "rgb(139, 144, 153)")  
+            canvas.draw_line((zom2x1,400), (zom2x1 + 70,400), 12, "rgb(214, 209, 169)")
+            canvas.draw_line((zom2x1 + 13,395), (zom2x1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            canvas.draw_circle((zom2x1 + 69,398), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            canvas.draw_line((zom2x1 + 5, 405), (zom2x1 + 45, 403), 9, "rgb(72, 105, 27)")
+         
+        # ZOMBIE #3 Dead
+        if zom3HP <= 0:
+            canvas.draw_line((zom3x1 - 55,400),(zom3x1 + 70, 400), 10, "rgb(87, 89, 94)")  
+            canvas.draw_line((zom3x1,400), (zom3x1 + 70,400), 12, "rgb(141, 152, 181)")
+            canvas.draw_line((zom3x1 + 13,395), (zom3x1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            canvas.draw_circle((zom3x1 + 69,398), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            canvas.draw_line((zom3x1 + 5, 405), (zom3x1 + 45, 403), 9, "rgb(72, 105, 27)")
+            
+        # ZOMBIE #4 Dead
+        if zom4HP <= 0:
+            canvas.draw_line((zom4x1 - 55,400),(zom4x1 + 70, 400), 10, "rgb(87, 89, 94)")  
+            canvas.draw_line((zom4x1,400), (zom4x1 + 70,400), 12, "rgb(141, 152, 181)")
+            canvas.draw_line((zom4x1 + 13,395), (zom4x1 + 40,395), 2.5, "rgb(138, 26, 26)")
+            canvas.draw_circle((zom4x1 + 69,398), 18, 5, "rgb(72, 105, 27)", "rgb(72, 105, 27)")
+            canvas.draw_line((zom4x1 + 5, 405), (zom4x1 + 45, 403), 9, "rgb(72, 105, 27)")
+            
+        # Zombie Boss 1 Dead
+        if zomB1HP <= 0:
+            canvas.draw_line((zomB1x1 + 60,400),(zomB1x1 + 270, 400), 50, "rgb(87, 89, 94)")
+            canvas.draw_line((zomB1x1 + 150,400), (zomB1x1,400), 53, "rgb(141, 152, 181)")
+            canvas.draw_line((zomB1x1 - 30,430), (zomB1x1 + 120,430), 6, "rgb(138, 26, 26)")
+            canvas.draw_circle((zomB1x2 - 20,397), 22, 35, "rgb(98, 122, 65)", "rgb(98, 122, 65)")
+            canvas.draw_line((zomB1x1 + 150, 415), (zomB1x3 + 70, 400), 40, "rgb(98, 122, 65)")
+
+        if blazeUse == True:
+            canvas.draw_circle((blazeFx,318),24,5,"rgb(272, 144, 3)","rgb(252, 144, 3)")
+            canvas.draw_circle((blazeFx - 40,328),24,5,"rgb(295, 204, 0)","rgb(255, 204, 0)")
+            canvas.draw_circle((blazeFx + 40,298),24,5,"rgb(224, 164, 6)","rgb(224, 164, 6)")
+            canvas.draw_circle((blazeFx + 92,324),27,5,"rgb(275, 142, 28)","rgb(235, 142, 28)")
+            canvas.draw_circle((blazeFx - 50,287),19,5,"rgb(227, 132, 0)","rgb(227, 132, 0)")
+            canvas.draw_circle((blazeFx - 7,282),30,5,"rgb(232, 120, 7)","rgb(232, 120, 7)")
+            canvas.draw_circle((blazeFx + 67,270),20,5,"rgb(242, 176, 7)","rgb(232, 176, 7)")
+            canvas.draw_circle((blazeFx + 40,340),18,5,"rgb(224, 201, 22)","rgb(224, 201, 22)")
+            
+        # For Loop // Default Limb Placement
+        for i in range(0,1):
+            time.sleep(0.07)
+            
+            # LIMB RESET
+            headx = 250
+            heady = 283
+            legLdefx = 250
+            legLdefy = 405
+            legRdefx = 250
+            legRdefy = 405
+            armLdefx = 250
+            armRdefx = 250
+            armLdefy = 360
+            armRdefy = 360 
+            hpPotx1 = -220
+            hpPotx2 = -224  
+            hpPotx3 = -240
+            hpSparkx = -200
+            blazeFx = -200
+            if musicMute == False and audioDamp == False:
+                music.set_volume(0.1)
+                
+            if lookingRight == True:
+                if swordEquip == True:
+                    swordWalkx1 = 315
+                    swordWalkx2 = 315
+                    swordWalkx3 = 245
+                    swordWalkx4 = 260
+                    swordWalkx5 = 326
+                    swordWalkx6 = 323
+                    swordWalkx7 = 320
+                    swordWalkx8 = 260
+                    swordWalky1 = 358
+                    swordWalky2 = 358
+                    swordWalky3 = 358
+                    swordWalky4 = 348
+                    swordWalky5 = 358
+                    swordWalky6 = 358
+                    swordWalky7 = 358
+                    swordWalky8 = 368
+            if lookingLeft == True:
+                if swordEquip == True:
+                    swordWalkx1 = 240
+                    swordWalkx2 = 240
+                    swordWalkx3 = 245
+                    swordWalkx4 = 239
+                    swordWalkx5 = 164
+                    swordWalkx6 = 167
+                    swordWalkx7 = 170
+                    swordWalkx8 = 239
+                    swordWalky1 = 358
+                    swordWalky2 = 358
+                    swordWalky3 = 358
+                    swordWalky4 = 348
+                    swordWalky5 = 358
+                    swordWalky6 = 358
+                    swordWalky7 = 358
+                    swordWalky8 = 368
+            if lookingLeft == True:
+                if potionEquip == True:
+                    if hpPotionCount > 0:
+                        hpPotHandx = 240
+            if lookingRight == True:
+                if potionEquip == True:
+                    if hpPotionCount > 0:
+                        hpPotHandx = 260      
+            c11 -= cloudAuto
+            if c11 + 85 <= -100:
+                c11 = 800
+            c21 -= cloudAuto
+            if c21 + 85 <= -100:
+                c21 = 1100
+            if zomHP > 0:
+                if zomx1 <= 350 and zomx1 >= 300:   
+                    zomx1 -= zombieMove - 2.9
+                    zomx2 -= zombieMove - 2.9
+                    zomx3 -= zombieMove - 2.9
+                    zomArm = 0
+                if zomx1 >= 280:
+                    zomx1 -= zombieMove
+                    zomx2 -= zombieMove
+                    zomx3 -= zombieMove
+                    zomArm = 0
+                if zomx1 <= 220:
+                    zomx1 += zombieMove
+                    zomx2 += zombieMove
+                    zomx3 += zombieMove
+                    zomArm = 100
+            if zom2HP > 0:
+                if zom2x1 <= 350 and zom2x1 >= 300:   
+                    zom2x1 -= zombie2Move - 2.9
+                    zom2x2 -= zombie2Move - 2.9
+                    zom2x3 -= zombie2Move - 2.9
+                    zom2Arm = 0
+                if zom2x1 >= 280:
+                    zom2x1 -= zombie2Move
+                    zom2x2 -= zombie2Move
+                    zom2x3 -= zombie2Move
+                    zom2Arm = 0
+                if zom2x1 <= 220:
+                    zom2x1 += zombie2Move
+                    zom2x2 += zombie2Move
+                    zom2x3 += zombie2Move
+                    zom2Arm = 100
+            if zom3HP > 0:
+                if zom3x1 <= 350 and zom3x1 >= 300:   
+                    zom3x1 -= zombie3Move - 2.9
+                    zom3x2 -= zombie3Move - 2.9
+                    zom3x3 -= zombie3Move - 2.9
+                    zom3Arm = 0
+                if zom3x1 >= 280:
+                    zom3x1 -= zombie3Move
+                    zom3x2 -= zombie3Move
+                    zom3x3 -= zombie3Move
+                    zom3Arm = 0
+                if zom3x1 <= 220:
+                    zom3x1 += zombie3Move
+                    zom3x2 += zombie3Move
+                    zom3x3 += zombie3Move
+                    zom3Arm = 100    
+            if zom4HP > 0:
+                if zom4x1 <= 350 and zom4x1 >= 300:   
+                    zom4x1 -= zombie4Move - 2.9
+                    zom4x2 -= zombie4Move - 2.9
+                    zom4x3 -= zombie4Move - 2.9
+                    zom4Arm = 0
+                if zom4x1 >= 280:
+                    zom4x1 -= zombie4Move
+                    zom4x2 -= zombie4Move
+                    zom4x3 -= zombie4Move
+                    zom4Arm = 0
+                if zom4x1 <= 220:
+                    zom4x1 += zombie4Move
+                    zom4x2 += zombie4Move
+                    zom4x3 += zombie4Move
+                    zom4Arm = 100    
+            if zomB1HP > 0:
+                if zomB1x1 <= 350 and zomB1x1 >= 300:   
+                    zomB1x1 -= zombieB1Move - 2.9
+                    zomB1x2 -= zombieB1Move - 2.9
+                    zomB1x3 -= zombieB1Move - 2.9
+                if zomB1x1 >= 280:
+                    zomB1x1 -= zombieB1Move
+                    zomB1x2 -= zombieB1Move
+                    zomB1x3 -= zombieB1Move
+                if zomB1x1 <= 220:
+                    zomB1x1 += zombieB1Move
+                    zomB1x2 += zombieB1Move
+                    zomB1x3 += zombieB1Move
+            # Zombie 1 Respawn
+            if zomHP <= 0:
+                zomHP -= 1
+            if zomHP <= -50:
+                zombieMove += 5
+                zomHP = 100
+                x = random.randint(-1000,1000)
+                if x <= 600 and x >= 0:
+                    x += 650
+                zomx1 += x
+                zomx2 += x
+                zomx3 += x
+                zomArm += x
+            # Zombie 2 Respawn
+            if zom2HP <= 0:
+                zom2HP -= 1
+            if zom2HP <= -50:
+                zombieMove += 5
+                zom2HP = 100
+                x = random.randint(-1000,1000)
+                if x <= 600 and x >= 0:
+                    x += 650
+                zom2x1 += x
+                zom2x2 += x
+                zom2x3 += x
+                zom2Arm += x
+            # Zombie 3 Respawn
+            if zom3HP <= 0:
+                zom3HP -= 1
+            if zom3HP <= -50:
+                zombieMove += 5
+                zom3HP = 100
+                x = random.randint(-1000,1000)
+                if x <= 600 and x >= 0:
+                    x += 650
+                zom3x1 += x
+                zom3x2 += x
+                zom3x3 += x
+                zom3Arm += x
+            # Zombie 4 Respawn
+            if zom4HP <= 0:
+                zom4HP -= 1
+            if zom4HP <= -50:
+                zombieMove += 5
+                zom4HP = 100
+                x = random.randint(-1000,1000)
+                if x <= 600 and x >= 0:
+                    x += 650
+                zom4x1 += x
+                zom4x2 += x
+                zom4x3 += x
+                zom4Arm += x
+
+
+            
+    for i in range(0,1):
+        if playerHP <= 30:
+            hurt.play()
+            playerHP += 1
+        if playerHP > 31:
+            hurt.pause()
+        if playerMana < 100:
+            playerMana += manaRegen
+
+    if swordText == True:
+        canvas.draw_text("+1 Steel Long Sword", (185,235), 15, "rgb(140, 255, 33)")
+        
+    if blazeText == True:
+        canvas.draw_text("+1 Legendary Blaze Spell", (167,230), 15, "rgb(240, 19, 30)")
+        
+    if gainXP == True:
+        if zomB1HP > 0:
+            canvas.draw_text("+100 XP", (220,250), 15, "rgb(140, 255, 33)")
+        if zomB1HP <= 0:
+            canvas.draw_text("+1000 XP", (220,250), 15, "rgb(140, 255, 33)")
+        
+    if playerHP <= 0:
+        dead = True
+ 
+    if zomHP <= 0:
+        zomprox.pause()
+    if zom2HP <= 0:
+        zom2prox.pause()
+    if zom3HP <= 0:
+        zom3prox.pause()
+    if zom4HP <= 0:
+        zom4prox.pause()
+    if zomB1HP <= 0:
+        zomb1prox.pause()
+
+    # zombie bite
+    if zomHP > 0:
+        if zomx1 <= 290 and zomx1 >= 210:
+            playerhit.play()
+            playerHP -= 3
+        if zomx1 <= 600 and zomx1 >= 210:
+            if startGame == True:
+                zomprox.play()     
+    if zom2HP > 0:
+        if zom2x1 <= 290 and zom2x1 >= 210:
+            playerhit.play()
+            playerHP -= 3
+        if zom2x1 <= 600 and zom2x1 >= 210:
+            zom2prox.play()
+    if zom3HP > 0:
+        if zom3x1 <= 290 and zom3x1 >= 210:
+            playerhit.play()
+            playerHP -= 3
+        if zom3x1 <= 600 and zom3x1 >= 210:
+            zom3prox.play()
+    if zom4HP > 0:
+        if zom4x1 <= 290 and zom4x1 >= 210:
+            playerhit.play()
+            playerHP -= 3
+        if zom4x1 <= 600 and zom4x1 >= 210:
+            zomprox.play()
+    if zomB1HP > 0:
+        if zomB1x1 <= 290 and zomB1x1 >= 210:
+            playerhit.play()
+            if playerHP > 0:
+                playerHP -= 35
+            elif playerHP <= 0:
+                playerHP -= 2.2
+        if zomB1x1 <= 600 and zomB1x1 >= 210:
+            zomb1prox.play()
+    # Level 1    
+    if scoreCount == 300:
+            blazeOwn = True
+            blazeText = True
+            blazeOwnStatus = "Owned"
+
+        
+        
+    # HUD
+    if startGame == True:
+        canvas.draw_text("Balance: $" + str(moneyCount), (13,585), 20, "white")
+        canvas.draw_text("HP: " + str(playerHP), (520,560), 20, "white")
+        canvas.draw_text("Mana: " + str(playerMana), (500,585), 20, "white")
+        canvas.draw_text("Score: " + str(scoreCount), (13,560), 20, "White")
+        canvas.draw_text("SHOP (G)", (512,455), 18, "white")
+        
+    if zomB1HP <= 0 and zomB1HP >= -80:
+        zomB1HP -= 1
+
+    
+    if shopUI == True:
+       
+        canvas.draw_polygon([(45,45),(45,555),(555,555),(555,45)],3,"rgb(150, 150, 150)","rgb(150, 150, 150)")
+        canvas.draw_polygon([(50,50),(50,550),(550,550),(550,50)],3,"rgb(242, 242, 242)","rgb(242, 242, 242)")
+        canvas.draw_line((80,100),(520,100),3,"rgb(204, 204, 204)")
+        canvas.draw_text("SHOP", (255,90), 35, "Black")
+        canvas.draw_text("Balance: $" + str(moneyCount), (80,89), 20, "Black")
+        if page1 == True:
+            page2 = False
+            # item 1
+            canvas.draw_polygon([(180,120),(180,220),(80,220),(80,120)],3,"rgb(204, 204, 204)","rgb(204, 204, 204)")
+            # Health Potion
+            canvas.draw_circle((130,181),28,5,"white","white")
+            canvas.draw_circle((130,181),25,5,"rgb(222, 95, 95)","rgb(222, 95, 95)")
+            canvas.draw_line((130,173),(130,148),20,"rgb(222, 95, 95)")
+            canvas.draw_line((130,138),(130,148),20,"white")
+            canvas.draw_line((118,136),(142,136),8,"rgb(130, 103, 66)")
+            canvas.draw_line((130,178),(140,163),3,"white")
+            canvas.draw_line((136,178),(143,168),2,"white")
+            canvas.draw_text("Minor Health Potion", (200,140), 30, "Black")
+            canvas.draw_text("Heals 20 HP - Assigns to \"Q\" Slot", (200,170), 20, "Black")
+            # Buy button
+            canvas.draw_polygon([(200,182),(200,220),(290,220),(290,182)],3,"rgb(110, 250, 90)","rgb(110, 250, 90)")
+            canvas.draw_text("Buy", (220,209), 30, "White")
+            canvas.draw_text("Cost: $2", (300,207), 25, "Black")
+            
+            # item 2
+            canvas.draw_polygon([(180,250),(180,350),(80,350),(80,250)],3,"rgb(204, 204, 204)","rgb(204, 204, 204)")
+            # Blaze Scroll
+            canvas.draw_circle((110,318),14,5,"rgb(252, 144, 3)","rgb(252, 144, 3)")
+            canvas.draw_circle((130,328),14,5,"rgb(255, 204, 0)","rgb(255, 204, 0)")
+            canvas.draw_circle((140,298),14,5,"rgb(204, 164, 6)","rgb(204, 164, 6)")
+            canvas.draw_circle((152,324),17,5,"rgb(235, 142, 28)","rgb(235, 142, 28)")
+            canvas.draw_circle((120,277),9,5,"rgb(233, 245, 17)","rgb(233, 245, 17)")
+            canvas.draw_circle((121,300),11,5,"rgb(232, 120, 7)","rgb(232, 120, 7)")
+            canvas.draw_circle((137,284),10,5,"rgb(232, 176, 7)","rgb(232, 176, 7)")
+            canvas.draw_circle((131,265),8,5,"rgb(235, 142, 28)","rgb(235, 142, 28)") 
+            canvas.draw_text("Blaze Spell", (200,273), 30, "Black")
+            canvas.draw_text("Deals 30 Damage, 25 Mana", (200,299), 20, "Black")
+            # Buy button
+            canvas.draw_polygon([(200,312),(200,350),(290,350),(290,312)],3,"rgb(224, 20, 30)","rgb(224, 20, 30)")
+            canvas.draw_text(blazeOwnStatus, (206.5,339), 26, "White")
+            canvas.draw_text("Unlock at Level 2", (300,338), 25, "Black")
+            
+            canvas.draw_polygon([(180,380),(180,480),(80,480),(80,380)],3,"rgb(204, 204, 204)","rgb(204, 204, 204)")
+            canvas.draw_text("Exit Shop (G)", (255,540), 18, "Black")
+        elif page2 == True:
+            page1 = False
+            canvas.draw_polygon([(45,45),(45,555),(555,555),(555,45)],3,"rgb(150, 150, 150)","rgb(150, 150, 150)")
+            canvas.draw_polygon([(50,50),(50,550),(550,550),(550,50)],3,"rgb(242, 242, 242)","rgb(242, 242, 242)")
+            canvas.draw_line((80,100),(520,100),3,"rgb(204, 204, 204)")
+            canvas.draw_text("SHOP", (255,90), 35, "Black")
+            canvas.draw_text("Balance: $" + str(moneyCount), (80,89), 20, "Black")
+            canvas.draw_text("Exit Shop (G)", (255,540), 18, "Black")    
+    else:
+        if startGame == True:
+            zombieMove = 3
+            zombie2Move = 3.8
+            zombie3Move = 3.3
+            zombie4Move = 3.7
+            zombieB1Move = 4.5
+            
+    # start game
+    music.play() 
+    if musicMute == True:
+        music.set_volume(0)
+        
+     
+    if startGame == False:
+        canvas.draw_text("JOURNEYS:", (130,185), 30, "black")
+        canvas.draw_text("JOURNEYS:", (131,186), 30, "white")
+        canvas.draw_text("WASTELAND", (297,186), 30, "black")
+        canvas.draw_text("WASTELAND", (296,185), 30, "rgb(46, 181, 25)")
+        canvas.draw_text("Click Here to PLAY", (230,215), 18, "white")
+        zombieMove = 0
+        zombie2Move = 0
+        zombie3Move = 0
+        zombie4Move = 0
+        zombieB1Move = 0
+        moveAbility = False
+   
+    if dead == True:
+        canvas.draw_polygon([(0, 600),(0, 0),(width, 0),(width, 600)], 3, "black", "black")
+        canvas.draw_text("YOU ARE DEAD", (172,315), 35, "rgb(46, 181, 25)")
+        canvas.draw_text("Press Reset to Try Again", (238,333), 14, "white")
+        canvas.draw_text("Score: " + str(scoreCount), (260,400), 20, "White")
+        moveAbility = False
+        playerhit.pause()
+        hurt.pause()
+        death.play()
+        if playerHP < -50:
+            death.pause()
+            music.pause()
+            zomb1prox.pause()
+ 
+def worldLeft():
+    global legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,standing,hpPotionCount,headx,heady,hpPotionDrink,hpPotx1,hpPotx2,hpPotx3,level,hpPotHandx,playerMana
+    global playerHP,worldLeft,worldRight,dead,swordx1,swordOwn,swordText,swordEquip,lookingLeft,lookingRight,zom4HP,zom4x1,zom4x2,zom4x3,zomx1,zomx2,zomx3
+    global swordWalkx1,swordWalkx2,swordWalkx3,swordWalkx4,swordWalkx5,swordWalkx6,swordWalkx7,swordWalkx8,swordWalky1,swordWalky2,swordWalky3,swordWalky4,swordWalky5,swordWalky6,swordWalky7,swordWalky8,zom2x1,zom2x2,zom2x3,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,potionEquip,zomx1
+    if standing == True:
+        headx = 250
+        heady = 283
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+        if potionEquip == True:
+            if hpPotionCount > 0:
+                hpPotHandx = 230
+        if swordEquip == True:
+            swordWalkx1 = 235
+            swordWalkx2 = 235
+            swordWalkx3 = 235
+            swordWalkx4 = 215
+            swordWalkx5 = 160
+            swordWalkx6 = 162
+            swordWalkx7 = 165
+            swordWalkx8 = 223
+            swordWalky1 = 358
+            swordWalky2 = 358
+            swordWalky3 = 358
+            swordWalky4 = 360
+            swordWalky5 = 326
+            swordWalky6 = 326.5
+            swordWalky7 = 328
+            swordWalky8 = 342
+    
+        
+    c11 += cloudMove
+    if c11 + 85 >= 800:
+        c11 = -100
+    c21 += cloudMove
+    if c21 + 85 >= 800:
+        c21 = -100
+
+    swordx1 += speedMove
+
+    zomx1 += speedMove 
+    zomx2 += speedMove
+    zomx3 += speedMove
+    zom2x1 += speedMove
+    zom2x2 += speedMove
+    zom2x3 += speedMove
+    zom3x1 += speedMove 
+    zom3x2 += speedMove
+    zom3x3 += speedMove
+    zom4x1 += speedMove 
+    zom4x2 += speedMove
+    zom4x3 += speedMove
+    zomB1x1 += speedMove 
+    zomB1x2 += speedMove
+    zomB1x3 += speedMove
+    
+def worldRight():
+    global legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,c11,c21,speedMove,cloudMove,cloudAuto,standing,hpPotionCount,headx,heady,hpPotionDrink,hpPotx1,hpPotx2,hpPotx3,level,hpPotHandx,playerMana
+    global playerHP,worldLeft,worldRight,dead,swordx1,swordOwn,swordText,swordEquip,lookingLeft,lookingRight,zom4HP,zom4x1,zom4x2,zom4x3,zomx1,zomx2,zomx3
+    global swordWalkx1,swordWalkx2,swordWalkx3,swordWalkx4,swordWalkx5,swordWalkx6,swordWalkx7,swordWalkx8,swordWalky1,swordWalky2,swordWalky3,swordWalky4,swordWalky5,swordWalky6,swordWalky7,swordWalky8,zom2x1,zom2x2,zom2x3,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,potionEquip,zomx1
+    if standing == True:
+        headx = 250
+        heady = 283
+        legLdefx = 265
+        legLdefy = 403
+        legRdefx = 235
+        legRdefy = 405
+        armLdefx = 270
+        armRdefx = 230
+        armLdefy = 358
+        armRdefy = 358
+        if potionEquip == True:
+            if hpPotionCount > 0:
+                hpPotHandx = 270
+        if swordEquip == True:
+            swordWalkx1 = 265
+            swordWalkx2 = 265
+            swordWalkx3 = 265
+            swordWalkx4 = 282
+            swordWalkx5 = 340
+            swordWalkx6 = 338
+            swordWalkx7 = 335
+            swordWalkx8 = 275
+            swordWalky1 = 358
+            swordWalky2 = 358
+            swordWalky3 = 358
+            swordWalky4 = 360
+            swordWalky5 = 326
+            swordWalky6 = 327
+            swordWalky7 = 328
+            swordWalky8 = 342
+
+    c11 -= cloudMove
+    if c11 + 85 <= -100:
+        c11 = 800
+    c21 -= cloudMove
+    if c21 + 85 <= -100:
+        c21 = 1100
+
+    swordx1 -= speedMove
+    zomx1 -= speedMove 
+    zomx2 -= speedMove
+    zomx3 -= speedMove
+    zom2x1 -= speedMove
+    zom2x2 -= speedMove
+    zom2x3 -= speedMove
+    zom3x1 -= speedMove 
+    zom3x2 -= speedMove
+    zom3x3 -= speedMove
+    zom4x1 -= speedMove 
+    zom4x2 -= speedMove
+    zom4x3 -= speedMove
+    zomB1x1 -= speedMove 
+    zomB1x2 -= speedMove
+    zomB1x3 -= speedMove   
+            
+def losehp():
+    global playerHP
+    if playerHP >= 5:
+        playerHP -= 5
+        
+def mute():
+    global musicMute
+    musicMute = not musicMute
+
+                
+def swordAttack():
+    global moneyCount, scoreCount, swordWalkx1,swordWalkx2,swordWalkx3,swordWalkx4,swordWalkx5,swordWalkx6,swordWalkx7,swordWalkx8,swordWalky1,swordWalky2,swordWalky3,swordWalky4,swordWalky5,swordWalky6,swordWalky7,swordWalky8,swordEquip,legLdefx,legLdefy,legRdefx,legRdefy,legWidth,armLdefx,armRdefx,armRdefy,armLdefy,lookingLeft,lookingRight,zomx1,zomx2,zomx3,zomHP,zombieMove,zom4HP,zom3HP
+    global gainXP,xpCount,levelUp1,zom2x1,zom2x2,zom2x3,zom2HP,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,levelUp1Text,levelUp2Text,shopUI,zombie2Move,zombie3Move,zombieB1Move,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,hpPotx1,hpPotx2,hpPotx3,hpSparkx,startGame,potionEquip,hpPotHandx,blazeUse,blazeOwn,blazeFx,blazeText,playerMana
+    if swordEquip == True:
+        if lookingRight == True:
+            swing.rewind()
+            swing.play()
+            armRdefx = 280
+            armRdefy = 350
+            swordWalkx1 = 340
+            swordWalkx2 = 340
+            swordWalkx3 = 270
+            swordWalkx4 = 285
+            swordWalkx5 = 360
+            swordWalkx6 = 358
+            swordWalkx7 = 355
+            swordWalkx8 = 285
+            swordWalky1 = 346
+            swordWalky2 = 346
+            swordWalky3 = 346
+            swordWalky4 = 336
+            swordWalky5 = 346
+            swordWalky6 = 346
+            swordWalky7 = 346
+            swordWalky8 = 356
+            if(scoreCount != 300):
+                blazeText = False
+        if lookingLeft == True:
+            swing.rewind()
+            swing.play()
+            armRdefx = 220
+            armRdefy = 350
+            swordWalkx1 = 215
+            swordWalkx2 = 215
+            swordWalkx3 = 226
+            swordWalkx4 = 214
+            swordWalkx5 = 139
+            swordWalkx6 = 142
+            swordWalkx7 = 145
+            swordWalkx8 = 214
+            swordWalky1 = 346
+            swordWalky2 = 346
+            swordWalky3 = 346
+            swordWalky4 = 336
+            swordWalky5 = 346
+            swordWalky6 = 346
+            swordWalky7 = 346
+            swordWalky8 = 356
+            if(scoreCount != 300):
+                blazeText = False
+            
+
+        if lookingRight:
+            if zomx1 <= 370 and zomx1 >= 250:
+                if zomHP > -10:
+                    zomHP -= 10
+                if zomHP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zomHP == 0:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False 
+        if lookingLeft:
+            if zomx1 >= 130 and zomx1 <= 250:
+                if zomHP > -10:
+                    zomHP -= 10
+                if zomHP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zomHP == 0:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False
+
+
+        if lookingRight:
+            if zom2x1 <= 370 and zom2x1 >= 250:
+                if zom2HP > -10:
+                    zom2HP -= 10
+                if zom2HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom2HP == 0:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False 
+        if lookingLeft:
+            if zom2x1 >= 130 and zom2x1 <= 250:
+                if zom2HP > 0:
+                    zom2HP -= 10
+                if zom2HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom2HP == 0:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False   
+
+
+        if lookingRight:
+            if zom3x1 <= 370 and zom3x1 >= 250:
+                if zom3HP > -10:
+                    zom3HP -= 10
+                if zom3HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom3HP >= 0 and zom3HP < 10:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False 
+        if lookingLeft:
+            if zom3x1 >= 130 and zom3x1 <= 250:
+                if zom3HP > -10:
+                    zom3HP -= 10
+                if zom3HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom3HP >= 0 and zom3HP < 10:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False  
+
+
+        if lookingRight:
+            if zom4x1 <= 370 and zom4x1 >= 250:
+                if zom4HP > -10:
+                    zom4HP -= 10
+                if zom4HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom4HP >= 0 and zom4HP < 10:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False 
+        if lookingLeft:
+            if zom4x1 >= 130 and zom4x1 <= 250:
+                if zom4HP > -10:
+                    zom4HP -= 10
+                if zom4HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zom4HP >= 0 and zom4HP < 10:
+                    scoreCount += 100
+                    moneyCount += 1
+                    zomdie.play()
+                    swordText = False  
+
+
+        if lookingRight:
+            if zomB1x1 <= 370 and zomB1x1 >= 250:
+                if zomB1HP > 0:
+                    zomB1HP -= 10
+                if zomB1HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zomB1HP >= 0 and zomB1HP < 10:
+                    scoreCount += 500
+                    moneyCount += 10
+                    zomdie.play()
+                    swordText = False 
+        if lookingLeft:
+            if zomB1x1 >= 130 and zomB1x1 <= 250:
+                if zomB1HP > 0:
+                    zomB1HP -= 10
+                if zomB1HP > 0:
+                    zomhit.rewind()
+                    zomhit.play()
+                if zomB1HP >= 0 and zomB1HP < 10:
+                    scoreCount += 500
+                    moneyCount += 10
+                    zomdie.play()
+                    swordText = False   
+
+def blazeAttack():
+    global scoreCount, moneyCount, scoreCount, lookingRight,lookingLeft,blazeUse,blazeFx,armLdefx,armLdefy,armRdefx,armRdefy,blazeText,levelUp1Text,gainXpText,playerMana,blazeDamage
+    global speedMove,moveAbility,standing,moneyCount,armLdefx,armLdefy,dead,swordx1,swordOwn,zomx1,zomx2,zomx3,zomHP,zombieMove,gainXP,xpCount,zom2x1,zom2x2,zom2x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,shopUI,zombie2Move,zombie3Move,zombieB1Move,hpPotx1,hpPotx2,hpPotx3,startGame,hpPotHandx,armLdefx,armRdefx,armRdefx,armRdefy,playerMana
+    global worldRight,worldLeft,swordText,swordEquip,lookingLeft,lookingRight,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,levelUp1,zom2HP,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,levelUp1Text,levelUp2Text,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,potionEquip,blazeUse,blazeOwn,blazeFx,blazeText,zom4HP,zom4x1,zom4x2,zom4x3,zom4Arm,zombie4Move
+    if blazeOwn == True:
+        if playerMana >= 25:
+            fire.rewind()
+            fire.play()
+            levelUp1Text = False
+            if scoreCount != 300:
+                blazeText = False
+            gainXP = False
+            swordEquip = False
+            playerMana -= 25
+            if lookingRight == True:
+                blazeUse = True
+                blazeFx = 380
+                armLdefx = 305 
+                armRdefx = 303
+                armLdefy = 295
+                armRdefy = 310
+            if lookingLeft == True:
+                blazeUse = True
+                blazeFx = 75
+                armLdefx = 193 
+                armRdefx = 195
+                armLdefy = 295
+                armRdefy = 310
+        
+        
+            if lookingRight:
+                if zomx1 <= 490 and zomx1 >= 250 and zomHP > 0:
+                    zomHP -= blazeDamage
+                    if zomHP >= -30 and zomHP < 10:
+                        zomdie.play()
+                        scoreCount += 100
+                        moneyCount += 1
+                        interactText = False
+                        swordText = False 
+            if lookingLeft:
+                if zomx1 >= 20 and zomx1 <= 250 and zomHP > 0:
+                    zomHP -= blazeDamage
+                    if zomHP >= -30 and zomHP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        interactText = False
+                        swordText = False
+
+
+            if lookingRight:
+                if zom2x1 <= 490 and zom2x1 >= 250 and zom2HP > 0:
+                    zom2HP -= blazeDamage
+                    if zom2HP >= -30 and zom2HP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False 
+            if lookingLeft:
+                if zom2x1 >= 20 and zom2x1 <= 250 and zom2HP > 0:
+                    zom2HP -= blazeDamage
+                    if zom2HP >= -30 and zom2HP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False
+
+
+            if lookingRight:
+                if zom3x1 <= 490 and zom3x1 >= 250 and zom3HP > 0:
+                    zom3HP -= blazeDamage
+                    if zom3HP > -30 and zom3HP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False 
+            if lookingLeft:
+                if zom3x1 >= 20 and zom3x1 <= 250 and zom3HP > 0:
+                    zom3HP -= blazeDamage
+                    if zom3HP > -30 and zom3HP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False
+
+            if lookingRight:
+                if zom4x1 <= 490 and zom4x1 >= 250 and zom4HP > 0:
+                    zom4HP -= blazeDamage
+                    if zom4HP > -30 and zom4HP < 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False 
+            if lookingLeft:
+                if zom4x1 >= 20 and zom4x1 <= 250 and zom4HP > 0:
+                    zom4HP -= blazeDamage
+                    if zom4HP > -30 and zom4HP <= 10:
+                        scoreCount += 100
+                        moneyCount += 1
+                        zomdie.play()
+                        swordText = False
+
+
+            if lookingRight:
+                if zomB1x1 <= 490 and zomB1x1 >= 250:
+                    zomB1HP -= blazeDamage
+                    if zomB1HP > -30 and zomB1HP <= 10:
+                        scoreCount += 500
+                        moneyCount += 10
+                        zomdie.play()
+                        swordText = False 
+            if lookingLeft:
+                if zomB1x1 >= 20 and zomB1x1 <= 250:
+                    zomB1HP -= blazeDamage
+                    if zomB1HP > -30 and zomB1HP <= 10:
+                        scoreCount += 500
+                        moneyCount += 10
+                        zomdie.play()
+                        swordText = False
+
+            
+def hpPotion():
+    global hpPotionDrink,hotbarSlot6,hpPotionCount,lookingLeft,headx,heady,armLdefx,armLdefy,hpPotx1,hpPotx2,hpPotx3,playerHP,hpSparkx,startGame,potionEquip,hpPotHandx,blazeText,blazeDamage,swordEquip
+    if hpPotionCount >= 1:
+        swordEquip = False
+        if lookingLeft == True:
+            potion.rewind()
+            potion.play()
+            headx = 252
+            heady = 282
+            armLdefx = 204
+            armLdefy = 280
+            hpPotx1 = 220
+            hpPotx2 = 224  
+            hpPotx3 = 240
+            hpSparkx = 240
+            hpPotionDrink = True
+            hpPotionCount -= 1
+            hpPotHandx = -200
+            if playerHP <= 100:
+                playerHP += 20
+
+        if lookingRight == True:
+            potion.rewind()
+            potion.play()
+            headx = 248
+            heady = 282
+            armLdefx = 287
+            armLdefy = 280
+            hpPotx1 = 280
+            hpPotx2 = 274  
+            hpPotx3 = 265
+            hpSparkx = 240
+            hpPotionCount -= 1
+            hpPotionDrink = True
+            hpPotHandx = -200
+            if playerHP <= 100:
+                playerHP += 20
+                
+
+        
+def click(click):
+    global moneyCount,hpPotionCount,shopUI,startGame,potionEquip,moveAbility,playerMana,swordEquip,blazeOwn,hotbarSlot2,hotbarSlot6,dead
+    if startGame == False:
+        button.play()
+        startGame = True
+        moveAbility = True
+        
+    if startGame == True and shopUI == False:
+        if dead == False:
+            if swordEquip == True:
+                swordAttack()
+                
+        if hotbarSlot2 == True:
+            if blazeOwn == True:
+                if playerMana >= 25:
+                    blazeAttack()
+        
+    if shopUI == True:
+        if moneyCount >= 2:
+                moneyCount -= 2
+                hpPotionCount += 1
+                buy.rewind()
+                buy.play()
+                
+    if hotbarSlot6 == True:
+            if hpPotionCount > 0:
+                hpPotion()
+       
+     
+def walkLeft():
+    global scoreCount, speedMove, cloudMove,interactText,moveAbility,standing,moneyCount,armLdefx,armLdefy,dead,swordx1,swordOwn,zomx1,zomx2,zomx3,zomHP,zombieMove,gainXP,xpCount,zom2x1,zom2x2,zom2x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,shopUI,zombie2Move,zombie3Move,zombieB1Move,hpPotx1,hpPotx2,hpPotx3,startGame,hpPotHandx,armLdefx,armRdefx,armRdefx,armRdefy,playerMana,blazeDamage,musicMute
+    global worldRight,swordText,swordEquip,lookingLeft,lookingRight,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,levelUp1,zom2HP,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,levelUp1Text,levelUp2Text,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,potionEquip,blazeUse,blazeOwn,blazeFx,blazeText,zom4HP,zom4x1,zom4x2,zom4x3,zom4Arm,zombie4Move,step,audioDamp
+    
+    if moveAbility == True:
+        step.rewind()
+        step.play()
+        worldLeft()
+        buyText = False
+        swordText = False
+        lookingRight = False
+        lookingLeft = True
+        if(scoreCount != 300):
+            blazeText = False
+
+
+def walkRight():
+    global scoreCount, speedMove, cloudMove,interactText,moveAbility,standing,moneyCount,armLdefx,armLdefy,dead,swordx1,swordOwn,zomx1,zomx2,zomx3,zomHP,zombieMove,gainXP,xpCount,zom2x1,zom2x2,zom2x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,shopUI,zombie2Move,zombie3Move,zombieB1Move,hpPotx1,hpPotx2,hpPotx3,startGame,hpPotHandx,armLdefx,armRdefx,armRdefx,armRdefy,playerMana,blazeDamage,musicMute
+    global worldRight,swordText,swordEquip,lookingLeft,lookingRight,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,levelUp1,zom2HP,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,levelUp1Text,levelUp2Text,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,potionEquip,blazeUse,blazeOwn,blazeFx,blazeText,zom4HP,zom4x1,zom4x2,zom4x3,zom4Arm,zombie4Move,step,audioDamp
+
+    if moveAbility == True:
+        step.rewind()
+        step.play()
+        worldRight()
+        buyText = False
+        swordText = False
+        lookingRight = True
+        lookingLeft = False
+        if(scoreCount != 300):
+            blazeText = False
+            
+def shop():
+    global startGame,shopUI,moveAbility,zombieMove,zombie2Move,zombie3Move,zombie4Move,zombieB1Move
+    if startGame == True:
+        shopUI = not shopUI
+        moveAbility = not moveAbility
+        zombieMove = 0
+        zombie2Move = 0
+        zombie3Move = 0
+        zombie4Move = 0
+        zombieB1Move = 0
+
+                
+def timer_handler():
+    if not timer_on:
+        timer2.start()
+    timer.stop()
+
+def timer2_handler():
+    global timer_on
+    timer_on=True
+    if len(held_keys)==0:
+        timer2.stop()
+        timer_on=False
+    else:
+        for item in held_keys:
+            action(item)
+
+def action(key):
+    global speedMove, cloudMove,interactText,moveAbility,standing,moneyCount,armLdefx,armLdefy,dead,swordx1,swordOwn,zomx1,zomx2,zomx3,zomHP,zombieMove,gainXP,xpCount,zom2x1,zom2x2,zom2x3,zomB1Arm,zomB1HP,zomB1x1,zomB1x2,zomB1x3,shopUI,zombie2Move,zombie3Move,zombieB1Move,hpPotx1,hpPotx2,hpPotx3,startGame,hpPotHandx,armLdefx,armRdefx,armRdefx,armRdefy,playerMana,blazeDamage,musicMute
+    global worldRight,swordText,swordEquip,lookingLeft,lookingRight,hotbarSlot1,hotbarSlot2,hotbarSlot3,hotbarSlot4,hotbarSlot5,hotbarSlot6,levelUp1,zom2HP,zom3Arm,zom3HP,zom3x1,zom3x2,zom3x3,levelUp1Text,levelUp2Text,shopUI,page1,page2,hpPotionCount,headx,heady,hpPotionDrink,potionEquip,blazeUse,blazeOwn,blazeFx,blazeText,zom4HP,zom4x1,zom4x2,zom4x3,zom4Arm,zombie4Move,step,audioDamp
+
+    if key == leftkey or key == akey:
+        walkLeft()
+    elif key == rightkey or key == dkey:
+        walkRight()
+
+    if key == simplegui.KEY_MAP["1"]:
+        if shopUI == False:
+            hotbarSlot1 = not hotbarSlot1
+            hotbarSlot2 = False
+            hotbarSlot3 = False
+            hotbarSlot4 = False
+            hotbarSlot5 = False
+            hotbarSlot6 = False
+            potionEquip = False
+            firehold.pause()
+            if swordOwn == True:
+                swordequip.rewind()
+                swordequip.play()
+                swordEquip = not swordEquip
+            
+            
+            
+    if key == simplegui.KEY_MAP["2"]:
+        if shopUI == False:
+            hotbarSlot2 = not hotbarSlot2
+            hotbarSlot1 = False
+            hotbarSlot3 = False
+            hotbarSlot4 = False
+            hotbarSlot5 = False
+            hotbarSlot6 = False
+            potionEquip = False
+            swordEquip = False
+            if hotbarSlot2 == True:
+                if blazeOwn == True:
+                    firehold.play()
+            if hotbarSlot2 == False:
+                if blazeOwn == True:
+                    firehold.pause()
+            
+    if key == simplegui.KEY_MAP["3"]:
+        if shopUI == False:
+            hotbarSlot3 = not hotbarSlot3
+            hotbarSlot1 = False
+            hotbarSlot2 = False
+            hotbarSlot4 = False
+            hotbarSlot5 = False
+            hotbarSlot6 = False
+            potionEquip = False
+            firehold.pause()
+            swordEquip = False
+    
+    if key == simplegui.KEY_MAP["4"]:
+        if shopUI == False:
+            hotbarSlot4 = not hotbarSlot4
+            hotbarSlot1 = False
+            hotbarSlot2 = False
+            hotbarSlot3 = False
+            hotbarSlot5 = False
+            hotbarSlot6 = False
+            swordEquip = False
+            firehold.pause()
+            potionEquip = False
+            
+    if key == simplegui.KEY_MAP["5"]:
+        if shopUI == False:
+            hotbarSlot5 = not hotbarSlot5
+            hotbarSlot1 = False
+            hotbarSlot2 = False
+            hotbarSlot3 = False
+            hotbarSlot4 = False
+            hotbarSlot6 = False
+            swordEquip = False
+            firehold.pause()
+            potionEquip = False
+            
+    if key == simplegui.KEY_MAP["q"]:
+        if shopUI == False:
+            hotbarSlot6 = not hotbarSlot6
+            hotbarSlot1 = False
+            hotbarSlot2 = False
+            hotbarSlot3 = False
+            hotbarSlot4 = False
+            hotbarSlot5 = False
+            firehold.pause()
+            swordEquip = False
+            if hpPotionCount >= 1:
+                potionEquip = not potionEquip
+                potequip.rewind()
+                potequip.play()
+            if hpPotionCount < 1:
+                potionEquip = False
+                hpPotionCount = 0
+            
+    if key == simplegui.KEY_MAP["g"]:  
+        if startGame == True:
+            shop()
+                
+            
+    if key == simplegui.KEY_MAP["m"]:
+        musicMute = not musicMute
+        
+
+            
+    if swordx1 >= 170 and swordx1 <= 260:
+         if swordOwn == False:
+                swordpickup.play()
+                swordOwn = True
+                swordText = True
+                hotbarSlot1 = False
+                hotbarSlot2 = False
+                hotbarSlot3 = False
+                hotbarSlot4 = False
+                hotbarSlot5 = False
+                hotbarSlot6 = False
+                swordEquip = False
+        
+def key_handler(key):
+    global held_keys
+    held_keys.append(key)
+    action(key)
+    if not timer_on:
+        timer.start()
+
+def release_handler(key):
+    global held_keys
+    if key in held_keys:
+        held_keys.remove(key)
+    global timer_on
+    if len(held_keys)==0:
+        timer.stop()
+        timer2.stop()
+        timer_on=False
+        
+                
+akey = simplegui.KEY_MAP['a']
+dkey = simplegui.KEY_MAP['d']
+leftkey = simplegui.KEY_MAP['left']
+rightkey = simplegui.KEY_MAP['right']
+
+
+timer = simplegui.create_timer(100, timer_handler)
+timer2 = simplegui.create_timer(200, timer2_handler)
+
+frame = simplegui.create_frame('Journeys: Wasteland', width, height)
+frame.set_canvas_background("White")
+frame.set_draw_handler(draw_handler)
+frame.set_keydown_handler(key_handler)
+frame.set_keyup_handler(release_handler)
+frame.set_mouseclick_handler(click)
+frame.add_label("CONTROLS:")
+frame.add_label("Walk Right: D")
+frame.add_label("Walk Left: A")
+frame.add_label("Attack / Use: Left click")
+frame.add_label("Shop: G")
+frame.add_label("Mute Music: M")
+frame.add_label("                ")
+frame.add_button("Mute Music", mute, 110)
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("                ")
+frame.add_label("Leaderboard:")
+frame.add_label("1. RaskaL: 15,000")
+frame.start()
